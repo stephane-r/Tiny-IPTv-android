@@ -1,68 +1,49 @@
-import React, {useEffect, useState} from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  View,
-} from 'react-native';
-import Player from './Player';
-
-const callApi = () =>
-  fetch('http://192.168.122.1:3000?country=fr', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((result) => result.json())
-    .catch(console.log);
+import React, {useState} from 'react';
+import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import {useAsyncStorage} from 'use-async-storage';
+import Playlist from './Playlist';
 
 const App = () => {
-  const [data, setData] = useState(null);
-  const [categories, setCategories] = useState(null);
-  const [source, setSource] = useState(null);
+  const [value, setValue] = useAsyncStorage<string>('fileId', '');
+  const [url, setUrl] = useState<null | string>(null);
 
-  useEffect(() => {
-    callApi().then((result) => {
-      setData(result.data);
-      setCategories(result.categories);
-    });
-  }, []);
+  const submit = async () => {
+    try {
+      const request = await fetch('http://192.168.122.1:3000/playlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          accept: 'application/json',
+        },
+        body: JSON.stringify({
+          url,
+        }),
+      });
+      const result = await request.json();
 
-  const renderItem = ({item}) => (
-    <View style={{flex: 1}}>
-      <TouchableHighlight onPress={() => setSource(item.url)}>
-        <Text>{item.name}</Text>
-      </TouchableHighlight>
-    </View>
-  );
+      setValue(result.fileId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const renderList = ({item}) => (
-    <View>
-      <Text style={{fontWeight: 'bold'}}>{item}</Text>
-      <FlatList
-        numColumns={2}
-        data={data[item]}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.name}
-      />
-    </View>
-  );
+  if (value) {
+    return (
+      <View style={styles.body}>
+        <Playlist fileId={value} clearFileId={() => setValue(null)} />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.body}>
-      {source && <Player source={source} />}
-      {categories ? (
-        <FlatList
-          numColumns={1}
-          data={categories}
-          renderItem={renderList}
-          keyExtractor={(item) => item}
-        />
-      ) : (
-        <Text>Loading data...</Text>
-      )}
+      <View style={{width: '100%'}}>
+        <Text>URL M3U file</Text>
+        <View style={{height: 15}} />
+        <TextInput style={{borderWidth: 1}} onChangeText={setUrl} />
+        <View style={{height: 15}} />
+        <Button title="Submit" onPress={submit} />
+      </View>
     </View>
   );
 };
@@ -70,10 +51,9 @@ const App = () => {
 const styles = StyleSheet.create({
   body: {
     flex: 1,
-  },
-  video: {
-    width: 300,
-    height: 200,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
