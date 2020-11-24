@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   FlatList,
@@ -10,37 +10,40 @@ import {
 } from 'react-native';
 import Player from './Player';
 
-const callApi = (fileId) =>
-  fetch(`http://192.168.122.1:3000/playlist?fileId=${fileId}&country=fr`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
+const callApi = (playlistId) =>
+  fetch(
+    `http://192.168.122.1:3000/playlist?playlistId=${playlistId}&country=fr`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     },
-  })
+  )
     .then((result) => result.json())
     .catch(console.log);
 
-const Playlist = ({fileId, clearFileId}) => {
+const Playlist = ({ playlistId, clearFileId }) => {
   const [data, setData] = useState(null);
   const [categories, setCategories] = useState(null);
   const [source, setSource] = useState(null);
 
   useEffect(() => {
-    callApi(fileId).then((result) => {
+    callApi(playlistId).then((result) => {
       setData(result.data);
       setCategories(result.categories);
     });
-  }, [fileId]);
+  }, [playlistId]);
 
-  const renderItem = ({item}) => (
-    <View style={{flex: 1}}>
+  const renderItem = ({ item }) => (
+    <View style={{ flex: 1 }}>
       <Image
         source={{
           uri: item.tvg.logo
             ? item.tvg.logo
             : 'https://www.semencesdefrance.com/wp-content/uploads/2020/01/placeholder.png',
         }}
-        style={{width: 200, height: 100}}
+        style={{ width: 200, height: 100 }}
       />
       <TouchableHighlight onPress={() => setSource(item.url)}>
         <Text>{item.name}</Text>
@@ -48,9 +51,9 @@ const Playlist = ({fileId, clearFileId}) => {
     </View>
   );
 
-  const renderList = ({item}) => (
+  const renderList = ({ item }) => (
     <View>
-      <Text style={{fontWeight: 'bold'}}>{item}</Text>
+      <Text style={{ fontWeight: 'bold' }}>{item}</Text>
       <FlatList
         numColumns={2}
         data={data[item]}

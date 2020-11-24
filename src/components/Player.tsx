@@ -1,8 +1,8 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import VlcPlayer from 'react-native-vlc-player';
 
-const Player = ({source}) => (
+const Player = ({ source }) => (
   <VlcPlayer
     style={styles.video}
     paused={false}
