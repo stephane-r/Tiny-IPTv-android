@@ -9,6 +9,10 @@ const HomeScreen = ({ navigation }) => {
   const [url, setUrl] = useState<null | string>(null);
 
   const submit = async () => {
+    if (url === null || url === '') {
+      return alert('Nop nop');
+    }
+
     try {
       const request = await fetch('http://192.168.122.1:3000/playlist', {
         method: 'POST',
@@ -21,8 +25,7 @@ const HomeScreen = ({ navigation }) => {
         }),
       });
       const { playlistId } = await request.json();
-      console.log(playlistId);
-      await setPlaylistId(playlistId);
+      setPlaylistId(playlistId);
 
       return navigation.navigate(Screen.Playlist);
     } catch (error) {

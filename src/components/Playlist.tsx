@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import {
   Button,
@@ -5,9 +6,10 @@ import {
   Image,
   StyleSheet,
   Text,
-  TouchableHighlight,
+  TouchableNativeFeedback,
   View,
 } from 'react-native';
+import { Screen } from '../enums/Screen';
 import Player from './Player';
 
 const callApi = (playlistId) =>
@@ -27,6 +29,7 @@ const Playlist = ({ playlistId, clearFileId }) => {
   const [data, setData] = useState(null);
   const [categories, setCategories] = useState(null);
   const [source, setSource] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     callApi(playlistId).then((result) => {
@@ -36,19 +39,24 @@ const Playlist = ({ playlistId, clearFileId }) => {
   }, [playlistId]);
 
   const renderItem = ({ item }) => (
-    <View style={{ flex: 1 }}>
-      <Image
-        source={{
-          uri: item.tvg.logo
-            ? item.tvg.logo
-            : 'https://www.semencesdefrance.com/wp-content/uploads/2020/01/placeholder.png',
-        }}
-        style={{ width: 200, height: 100 }}
-      />
-      <TouchableHighlight onPress={() => setSource(item.url)}>
+    <TouchableNativeFeedback
+      onPress={() =>
+        navigation.navigate(Screen.Player, {
+          source: item.url,
+        })
+      }>
+      <View style={{ flex: 1 }}>
+        <Image
+          source={{
+            uri: item.tvg.logo
+              ? item.tvg.logo
+              : 'https://www.semencesdefrance.com/wp-content/uploads/2020/01/placeholder.png',
+          }}
+          style={{ width: 200, height: 100 }}
+        />
         <Text>{item.name}</Text>
-      </TouchableHighlight>
-    </View>
+      </View>
+    </TouchableNativeFeedback>
   );
 
   const renderList = ({ item }) => (
@@ -58,7 +66,7 @@ const Playlist = ({ playlistId, clearFileId }) => {
         numColumns={2}
         data={data[item]}
         renderItem={renderItem}
-        keyExtractor={(item) => item.name}
+        keyExtractor={({ name }) => name}
       />
     </View>
   );
@@ -66,7 +74,6 @@ const Playlist = ({ playlistId, clearFileId }) => {
   return (
     <View style={styles.body}>
       <Button title="Logout" onPress={clearFileId} />
-      {source && <Player source={source} />}
       {categories ? (
         <FlatList
           numColumns={1}

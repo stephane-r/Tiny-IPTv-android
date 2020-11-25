@@ -6,6 +6,7 @@ import HomeScreen from '../screens/Home';
 import PlaylistScreen from '../screens/Playlist';
 import LoadingScreen from '../screens/Loading';
 import { Screen } from '../enums/Screen';
+import PlayerScreen from '../screens/Player';
 
 const Stack = createStackNavigator();
 
@@ -15,6 +16,7 @@ const App = () => (
       <Stack.Screen name={Screen.Loading} component={LoadingScreen} />
       <Stack.Screen name={Screen.Home} component={HomeScreen} />
       <Stack.Screen name={Screen.Playlist} component={PlaylistScreen} />
+      <Stack.Screen name={Screen.Player} component={PlayerScreen} />
     </Stack.Navigator>
   </NavigationContainer>
 );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useAsyncStorage } from 'use-async-storage';
 import Playlist from '../components/Playlist';
 import { Screen } from '../enums/Screen';
@@ -17,20 +17,7 @@ const PlaylistScreen = ({ navigation }) => {
     return <View />;
   }
 
-  return (
-    <View style={styles.body}>
-      <Playlist playlistId={value} clearFileId={onClearField} />
-    </View>
-  );
+  return <Playlist playlistId={value} clearFileId={onClearField} />;
 };
-
-const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default PlaylistScreen;
