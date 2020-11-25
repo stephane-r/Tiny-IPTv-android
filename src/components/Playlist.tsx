@@ -10,7 +10,6 @@ import {
   View,
 } from 'react-native';
 import { Screen } from '../enums/Screen';
-import Player from './Player';
 
 const callApi = (playlistId) =>
   fetch(
@@ -28,7 +27,6 @@ const callApi = (playlistId) =>
 const Playlist = ({ playlistId, clearFileId }) => {
   const [data, setData] = useState(null);
   const [categories, setCategories] = useState(null);
-  const [source, setSource] = useState(null);
   const navigation = useNavigation();
 
   useEffect(() => {
