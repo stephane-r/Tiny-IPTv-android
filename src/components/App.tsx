@@ -7,6 +7,7 @@ import PlaylistScreen from '../screens/Playlist';
 import LoadingScreen from '../screens/Loading';
 import { Screen } from '../enums/Screen';
 import PlayerScreen from '../screens/Player';
+import FavorisScreen from '../screens/Favoris';
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,7 @@ const App = () => (
       <Stack.Screen name={Screen.Home} component={HomeScreen} />
       <Stack.Screen name={Screen.Playlist} component={PlaylistScreen} />
       <Stack.Screen name={Screen.Player} component={PlayerScreen} />
+      <Stack.Screen name={Screen.Favoris} component={FavorisScreen} />
     </Stack.Navigator>
   </NavigationContainer>
 );

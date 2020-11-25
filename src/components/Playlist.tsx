@@ -9,7 +9,9 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
+import { useAsyncStorage } from 'use-async-storage';
 import { Screen } from '../enums/Screen';
+import { Playlist as PlaylistEnum } from '../enums/Playlist';
 
 const callApi = (playlistId) =>
   fetch(
@@ -28,6 +30,19 @@ const Playlist = ({ playlistId, clearFileId }) => {
   const [data, setData] = useState(null);
   const [categories, setCategories] = useState(null);
   const navigation = useNavigation();
+  const [favoris, setFavoris] = useAsyncStorage<string[]>(
+    PlaylistEnum.Favoris,
+    [],
+  );
+
+  const addOrRemoveFromFavoris = (name: string): void => {
+    if (favoris.includes(name)) {
+      const favorisUpdated = favoris.filter((f) => f !== name);
+      return setFavoris(favorisUpdated);
+    }
+
+    return setFavoris([...favoris, name]);
+  };
 
   useEffect(() => {
     callApi(playlistId).then((result) => {
@@ -44,6 +59,14 @@ const Playlist = ({ playlistId, clearFileId }) => {
         })
       }>
       <View style={{ flex: 1 }}>
+        <Button
+          title={
+            favoris?.includes(item.name)
+              ? 'Remove from favoris'
+              : 'Add to favoris'
+          }
+          onPress={() => addOrRemoveFromFavoris(item.name)}
+        />
         <Image
           source={{
             uri: item.tvg.logo
@@ -72,6 +95,10 @@ const Playlist = ({ playlistId, clearFileId }) => {
   return (
     <View style={styles.body}>
       <Button title="Logout" onPress={clearFileId} />
+      <Button
+        title="Favoris"
+        onPress={() => navigation.navigate(Screen.Favoris)}
+      />
       {categories ? (
         <FlatList
           numColumns={1}
