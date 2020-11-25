@@ -1,5 +1,5 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import React, { useEffect } from 'react';
 import {
   Button,
   FlatList,
@@ -10,8 +10,11 @@ import {
   View,
 } from 'react-native';
 import { useAsyncStorage } from 'use-async-storage';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Screen } from '../enums/Screen';
 import { Playlist as PlaylistEnum } from '../enums/Playlist';
+import { receiveData, useApp } from '../states/app';
 
 const callApi = (playlistId) =>
   fetch(
@@ -26,10 +29,10 @@ const callApi = (playlistId) =>
     .then((result) => result.json())
     .catch(console.log);
 
-const Playlist = ({ playlistId, clearFileId }) => {
-  const [data, setData] = useState(null);
-  const [categories, setCategories] = useState(null);
+const TestScreen = () => {
+  const app = useApp();
   const navigation = useNavigation();
+  const { params } = useRoute();
   const [favoris, setFavoris] = useAsyncStorage<string[]>(
     PlaylistEnum.Favoris,
     [],
@@ -43,13 +46,6 @@ const Playlist = ({ playlistId, clearFileId }) => {
 
     return setFavoris([...favoris, name]);
   };
-
-  useEffect(() => {
-    callApi(playlistId).then((result) => {
-      setData(result.data);
-      setCategories(result.categories);
-    });
-  }, [playlistId]);
 
   const renderItem = ({ item }) => (
     <TouchableNativeFeedback
@@ -80,17 +76,29 @@ const Playlist = ({ playlistId, clearFileId }) => {
     </TouchableNativeFeedback>
   );
 
-  const renderList = ({ item }) => (
-    <View>
-      <Text style={{ fontWeight: 'bold' }}>{item}</Text>
+  return (
+    <View style={{ flex: 1 }}>
       <FlatList
         numColumns={2}
-        data={data[item]}
+        data={app.data[params.category]}
         renderItem={renderItem}
         keyExtractor={({ name }) => name}
       />
     </View>
   );
+};
+
+const Tab = createMaterialTopTabNavigator();
+
+const Playlist = ({ playlistId, clearFileId }) => {
+  const navigation = useNavigation();
+  const app = useApp();
+
+  useEffect(() => {
+    callApi(playlistId).then((result) => {
+      receiveData(result);
+    });
+  }, [playlistId]);
 
   return (
     <View style={styles.body}>
@@ -99,13 +107,29 @@ const Playlist = ({ playlistId, clearFileId }) => {
         title="Favoris"
         onPress={() => navigation.navigate(Screen.Favoris)}
       />
-      {categories ? (
-        <FlatList
-          numColumns={1}
-          data={categories}
-          renderItem={renderList}
-          keyExtractor={(item) => item}
-        />
+      {app.categories ? (
+        <Tab.Navigator
+          tabBarOptions={{
+            labelStyle: { fontSize: 12 },
+            style: { backgroundColor: 'powderblue' },
+            showIcon: true,
+            showLabel: false,
+          }}
+          tabBarPosition="bottom">
+          {app.categories.map((c) => (
+            <Tab.Screen
+              key={c}
+              name={c}
+              component={TestScreen}
+              options={{
+                tabBarIcon: () => <Icon name="api" size={25} color="#000" />,
+              }}
+              initialParams={{
+                category: c,
+              }}
+            />
+          ))}
+        </Tab.Navigator>
       ) : (
         <Text>Loading data...</Text>
       )}
