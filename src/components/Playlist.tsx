@@ -76,13 +76,27 @@ const TestScreen = () => {
     </TouchableNativeFeedback>
   );
 
+  const renderGroup = ({ item }) => (
+    <View>
+      <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>
+        {item.title}
+      </Text>
+      <FlatList
+        numColumns={2}
+        data={item.items}
+        renderItem={renderItem}
+        keyExtractor={({ name }) => name}
+      />
+    </View>
+  );
+
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        numColumns={2}
+        numColumns={1}
         data={app.data[params.category]}
-        renderItem={renderItem}
-        keyExtractor={({ name }) => name}
+        renderItem={renderGroup}
+        keyExtractor={({ title }) => title}
       />
     </View>
   );
@@ -109,9 +123,12 @@ const Playlist = ({ playlistId, clearFileId }) => {
       />
       {app.categories ? (
         <Tab.Navigator
+          lazy
           tabBarOptions={{
-            labelStyle: { fontSize: 12 },
-            style: { backgroundColor: 'powderblue' },
+            scrollEnabled: true,
+            tabStyle: {
+              width: 100,
+            },
             showIcon: true,
             showLabel: false,
           }}
