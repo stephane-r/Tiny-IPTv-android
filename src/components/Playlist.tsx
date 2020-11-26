@@ -15,8 +15,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Screen } from '../enums/Screen';
 import { Playlist as PlaylistEnum } from '../enums/Playlist';
 import { receiveData, useApp } from '../states/app';
+import { Channel, ChannelGroup, Playlist as PlaylistType } from '../types';
 
-const callApi = (playlistId) =>
+const callApi = (playlistId: string): Promise<PlaylistType> =>
   fetch(
     `http://192.168.122.1:3000/playlist?playlistId=${playlistId}&country=fr`,
     {
@@ -29,7 +30,7 @@ const callApi = (playlistId) =>
     .then((result) => result.json())
     .catch(console.log);
 
-const TestScreen = () => {
+const TestScreen: React.FC = () => {
   const app = useApp();
   const navigation = useNavigation();
   const { params } = useRoute();
@@ -47,7 +48,7 @@ const TestScreen = () => {
     return setFavoris([...favoris, name]);
   };
 
-  const renderItem = ({ item }) => (
+  const renderItem: React.FC = ({ item }: { item: Channel }) => (
     <TouchableNativeFeedback
       onPress={() =>
         navigation.navigate(Screen.Player, {
@@ -76,7 +77,7 @@ const TestScreen = () => {
     </TouchableNativeFeedback>
   );
 
-  const renderGroup = ({ item }) => (
+  const renderGroup: React.FC = ({ item }: { item: ChannelGroup }) => (
     <View>
       <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>
         {item.title}
@@ -104,12 +105,18 @@ const TestScreen = () => {
 
 const Tab = createMaterialTopTabNavigator();
 
-const Playlist = ({ playlistId, clearFileId }) => {
+const Playlist = ({
+  playlistId,
+  clearFileId,
+}: {
+  playlistId: string;
+  clearFileId: () => void;
+}) => {
   const navigation = useNavigation();
   const app = useApp();
 
   useEffect(() => {
-    callApi(playlistId).then((result) => {
+    callApi(playlistId).then((result: PlaylistType) => {
       receiveData(result);
     });
   }, [playlistId]);
