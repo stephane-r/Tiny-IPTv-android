@@ -12,7 +12,6 @@ const onAppRender = (navigate) => {
         ? Screen.Login
         : Screen.Home;
 
-    console.log(parsedValue);
     return navigate(startScreen);
   });
 };

@@ -17,7 +17,7 @@ const HomeScreen = ({ navigation }) => {
 
   const onClearField = async () => {
     await setValue(null);
-    return navigation.navigate(Screen.Home);
+    navigation.navigate(Screen.Login);
   };
 
   useEffect(() => {

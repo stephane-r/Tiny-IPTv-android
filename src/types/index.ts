@@ -1,3 +1,9 @@
+export interface LoginFormData {
+  username: string;
+  password: string;
+  server: string;
+}
+
 export interface Playlist {
   categories: string[];
   data: {
