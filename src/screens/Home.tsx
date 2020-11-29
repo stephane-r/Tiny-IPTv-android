@@ -1,47 +1,69 @@
-import React, { useEffect, useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
 import { useAsyncStorage } from 'use-async-storage';
-import { Playlist } from '../enums/Playlist';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Screen } from '../enums/Screen';
+import { Playlist as PlaylistEnum } from '../enums/Playlist';
+import { receiveData, useApp } from '../states/app';
+import { getPlaylist } from '../api';
+import TabScreen from './Tab';
+
+const Tab = createMaterialTopTabNavigator();
 
 const HomeScreen = ({ navigation }) => {
-  const [, setPlaylistId] = useAsyncStorage<string | null>(Playlist.id, null);
-  const [url, setUrl] = useState<null | string>(null);
+  const [playlistId, setValue] = useAsyncStorage<string>(PlaylistEnum.id);
+  const app = useApp();
 
-  const submit = async () => {
-    if (url === null || url === '') {
-      return alert('Nop nop');
-    }
-
-    try {
-      const request = await fetch('http://192.168.122.1:3000/playlist', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          accept: 'application/json',
-        },
-        body: JSON.stringify({
-          url,
-        }),
-      });
-      const { playlistId } = await request.json();
-      setPlaylistId(playlistId);
-
-      return navigation.navigate(Screen.Playlist);
-    } catch (error) {
-      console.log(error);
-    }
+  const onClearField = async () => {
+    await setValue(null);
+    return navigation.navigate(Screen.Home);
   };
+
+  useEffect(() => {
+    getPlaylist(playlistId).then(receiveData);
+  }, [playlistId]);
+
+  if (!playlistId) {
+    return <View />;
+  }
 
   return (
     <View style={styles.body}>
-      <View style={{ width: '100%' }}>
-        <Text>URL M3U file</Text>
-        <View style={{ height: 15 }} />
-        <TextInput style={{ borderWidth: 1 }} onChangeText={setUrl} />
-        <View style={{ height: 15 }} />
-        <Button title="Submit" onPress={submit} />
-      </View>
+      <Button title="Logout" onPress={onClearField} />
+      <Button
+        title="Favoris"
+        onPress={() => navigation.navigate(Screen.Favoris)}
+      />
+      {app?.categories ? (
+        <Tab.Navigator
+          lazy
+          tabBarOptions={{
+            scrollEnabled: true,
+            tabStyle: {
+              width: 100,
+            },
+            showIcon: true,
+            showLabel: false,
+          }}
+          tabBarPosition="bottom">
+          {app.categories.map((c) => (
+            <Tab.Screen
+              key={c}
+              name={c}
+              component={TabScreen}
+              options={{
+                tabBarIcon: () => <Icon name="api" size={25} color="#000" />,
+              }}
+              initialParams={{
+                category: c,
+              }}
+            />
+          ))}
+        </Tab.Navigator>
+      ) : (
+        <Text>Loading data...</Text>
+      )}
     </View>
   );
 };
@@ -49,9 +71,10 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   body: {
     flex: 1,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  video: {
+    width: 300,
+    height: 200,
   },
 });
 

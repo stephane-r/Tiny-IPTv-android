@@ -1,7 +1,7 @@
 export enum Screen {
   Loading = 'loading',
   Home = 'home',
-  Playlist = 'playlist',
+  Login = 'Login',
   Player = 'player',
   Favoris = 'favoris',
 }

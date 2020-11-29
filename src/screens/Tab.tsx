@@ -29,7 +29,7 @@ const TabScreen: React.FC = () => {
         {data.title} ({data.items.length})
       </Text>
       <FlatList
-        numColumns={1}
+        numColumns={2}
         data={data.items}
         renderItem={renderChannel}
         keyExtractor={({ name }) => name}

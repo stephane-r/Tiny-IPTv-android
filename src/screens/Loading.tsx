@@ -9,8 +9,10 @@ const onAppRender = (navigate) => {
     const parsedValue = JSON.parse(result);
     const startScreen =
       parsedValue === null || parsedValue === undefined
-        ? Screen.Home
-        : Screen.Playlist;
+        ? Screen.Login
+        : Screen.Home;
+
+    console.log(parsedValue);
     return navigate(startScreen);
   });
 };
