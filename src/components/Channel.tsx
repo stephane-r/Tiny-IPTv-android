@@ -3,6 +3,8 @@ import React from 'react';
 import {
   Button,
   Image,
+  ImageBackground,
+  StyleSheet,
   Text,
   TouchableNativeFeedback,
   View,
@@ -28,16 +30,16 @@ const Channel: React.FC = ({
           source: item.url,
         })
       }>
-      <View style={{ flex: 1 }}>
-        <Button
+      <View style={styles.container}>
+        {/* <Button
           title={
             favorisIds?.includes(item.name)
               ? 'Remove from favoris'
               : 'Add to favoris'
           }
           onPress={() => addOrRemoveFromFavoris(item)}
-        />
-        <Image
+        /> */}
+        <ImageBackground
           source={{
             uri: item.tvg.logo
               ? item.tvg.logo
@@ -45,10 +47,26 @@ const Channel: React.FC = ({
           }}
           style={{ width: 200, height: 100 }}
         />
-        <Text>{item.name}</Text>
+        <Text style={styles.name}>{item.name}</Text>
       </View>
     </TouchableNativeFeedback>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: 200,
+    height: 200,
+    borderRadius: 20,
+    backgroundColor: '#d3d3d3',
+    marginHorizontal: 15,
+    justifyContent: 'center',
+  },
+  name: {
+    position: 'absolute',
+    bottom: 15,
+    left: 15,
+  },
+});
 
 export default Channel;

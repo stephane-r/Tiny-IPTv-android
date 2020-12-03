@@ -1,49 +1,39 @@
 import React from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { Screen } from '../enums/Screen';
 import TabScreen from './Tab';
-import useAuth from '../hooks/useAuth';
 import { useApp } from '../states/app';
+import Navigation from '../components/Navigation';
+import FavorisScreen from './Favoris';
+import { Screen } from '../enums/Screen';
+import TabBar, { TAB_ICONS } from '../components/TabBar';
 
 const Tab = createMaterialTopTabNavigator();
 
-const TAB_BAR_OPTIONS = {
-  scrollEnabled: true,
-  tabStyle: {
-    width: 100,
-  },
-  showIcon: true,
-  showLabel: false,
-};
-
-const HomeScreen: React.FC = ({ navigation }) => {
+const HomeScreen: React.FC = () => {
   const app = useApp();
-  const { logout } = useAuth();
 
   return (
     <View style={styles.body}>
-      <Button title="Logout" onPress={logout} />
-      <Button
-        title="Favoris"
-        onPress={() => navigation.navigate(Screen.Favoris)}
-      />
+      <Navigation />
       {app?.categories ? (
-        <Tab.Navigator lazy tabBarOptions={TAB_BAR_OPTIONS}>
-          {app.categories.map((c) => (
+        <Tab.Navigator
+          lazy
+          tabBar={(props) => <TabBar {...props} />}
+          tabBarPosition="bottom">
+          {app.categories.map((c, index) => (
             <Tab.Screen
               key={c}
               name={c}
               component={TabScreen}
-              options={{
-                tabBarIcon: () => <Icon name="api" size={25} color="#000" />,
-              }}
               initialParams={{
+                categoryName: c,
                 data: app.data[c],
               }}
             />
           ))}
+          <Tab.Screen name={Screen.Favoris} component={FavorisScreen} />
         </Tab.Navigator>
       ) : (
         <Text>Loading data...</Text>
@@ -52,13 +42,21 @@ const HomeScreen: React.FC = ({ navigation }) => {
   );
 };
 
+// const TAB_BAR_OPTIONS = {
+//   scrollEnabled: true,
+//   tabStyle: {
+//     width: 100,
+//   },
+//   activeTintColor: 'white',
+//   inactiveTintColor: 'white',
+//   showIcon: true,
+//   style: { height: 100, alignItems: 'center', backgroundColor: '#1d1d1d' },
+// };
+
 const styles = StyleSheet.create({
   body: {
     flex: 1,
-  },
-  video: {
-    width: 300,
-    height: 200,
+    backgroundColor: '#1d1d1d',
   },
 });
 

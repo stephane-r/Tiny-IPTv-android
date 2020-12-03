@@ -5,7 +5,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Screen } from '../enums/Screen';
 import LoadingScreen from '../screens/Loading';
 import PlayerScreen from '../screens/Player';
-import FavorisScreen from '../screens/Favoris';
 import LoginScreen from '../screens/Login';
 import HomeScreen from '../screens/Home';
 
@@ -18,7 +17,6 @@ const App = () => (
       <Stack.Screen name={Screen.Login} component={LoginScreen} />
       <Stack.Screen name={Screen.Home} component={HomeScreen} />
       <Stack.Screen name={Screen.Player} component={PlayerScreen} />
-      <Stack.Screen name={Screen.Favoris} component={FavorisScreen} />
     </Stack.Navigator>
   </NavigationContainer>
 );

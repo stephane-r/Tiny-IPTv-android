@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useFavoris } from '../hooks/useFavoris';
 import { Channel as ChannelType } from '../types';
@@ -17,12 +17,11 @@ const ChannelGroup: React.FC = ({ item }: { item: ChannelType }) => {
   );
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ height: 10 }} />
-      <Text style={{ fontWeight: 'bold' }}>
+    <View style={styles.container}>
+      <Text style={{ fontWeight: 'bold', paddingLeft: 15, color: 'white' }}>
         {item.title.replace(/[^a-zA-Z0-9]/g, '').replace('FR', '')}
       </Text>
-      <View style={{ height: 10 }} />
+      <View style={{ height: 15 }} />
       <FlatList
         horizontal
         data={item.items}
@@ -33,5 +32,12 @@ const ChannelGroup: React.FC = ({ item }: { item: ChannelType }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    paddingLeft: 15,
+    backgroundColor: '#1d1d1d',
+  },
+});
 
 export default ChannelGroup;
