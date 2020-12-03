@@ -8,8 +8,8 @@ const initialAppState: Playlist = {
 
 const app = createState(initialAppState);
 
-const { setState } = app;
+const { setState, resetState } = app;
 
+export { resetState };
 export const useApp = createHook(app);
-
 export const receiveData = (data: Playlist) => setState(() => data);

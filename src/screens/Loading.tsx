@@ -1,16 +1,21 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { getAndReceivePlaylist } from '../api';
 import { Playlist } from '../enums/Playlist';
 import { Screen } from '../enums/Screen';
 
 const onAppRender = (navigate) => {
-  AsyncStorage.getItem(Playlist.id).then((result) => {
+  AsyncStorage.getItem(Playlist.id).then(async (result) => {
     const parsedValue = JSON.parse(result);
     const startScreen =
       parsedValue === null || parsedValue === undefined
         ? Screen.Login
         : Screen.Home;
+
+    if (startScreen === Screen.Home) {
+      await getAndReceivePlaylist(parsedValue);
+    }
 
     return navigate(startScreen);
   });

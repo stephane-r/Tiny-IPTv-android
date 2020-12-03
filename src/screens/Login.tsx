@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  ScrollView,
+  Button,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Dimensions,
+  StatusBar,
+} from 'react-native';
 import { useAsyncStorage } from 'use-async-storage';
-import { getPlaylist } from '../api';
+import { getAndReceivePlaylist } from '../api';
 import { Playlist } from '../enums/Playlist';
 import { Screen } from '../enums/Screen';
-import { receiveData } from '../states/app';
 import { LoginFormData } from '../types';
 
 const generateLoginUrl = ({ server, username, password }: LoginFormData) =>
@@ -38,7 +46,8 @@ const LoginScreen = ({ navigation }) => {
         }),
       });
       const response = await request.json();
-      setPlaylistId(response.playlistId);
+      await setPlaylistId(response.playlistId);
+      await getAndReceivePlaylist(response.playlistId);
 
       return navigation.navigate(Screen.Home);
     } catch (error) {
@@ -55,63 +64,67 @@ const LoginScreen = ({ navigation }) => {
   const submitFormData = (): void => submitUrl(generateLoginUrl(formData));
 
   const loginWithPlaylistId = async () => {
-    const data = await getPlaylist(id);
-    receiveData(data);
+    await getAndReceivePlaylist(id);
     await setPlaylistId(id);
 
     return navigation.navigate(Screen.Home);
   };
 
   return (
-    <View style={styles.body}>
-      <View style={{ width: '100%' }}>
-        <Text>Account</Text>
-        <View style={{ height: 15 }} />
-        <TextInput
-          style={{ borderWidth: 1 }}
-          placeholder="Username"
-          onChangeText={(username) => onChangeText('username', username)}
-        />
-        <View style={{ height: 15 }} />
-        <TextInput
-          style={{ borderWidth: 1 }}
-          placeholder="Password"
-          onChangeText={(password) => onChangeText('password', password)}
-        />
-        <View style={{ height: 15 }} />
-        <TextInput
-          style={{ borderWidth: 1 }}
-          placeholder="Server"
-          onChangeText={(server) => onChangeText('server', server)}
-        />
-        <View style={{ height: 15 }} />
-        <Button title="Submit" onPress={submitFormData} />
-        <View style={{ height: 15 }} />
-        <Text>Or</Text>
-        <View style={{ height: 15 }} />
-        <Text>URL M3U file</Text>
-        <View style={{ height: 15 }} />
-        <TextInput
-          style={{ borderWidth: 1 }}
-          placeholder="url"
-          onChangeText={setUrl}
-        />
-        <View style={{ height: 15 }} />
-        <Button title="Submit" onPress={submitUrl} />
-        <View style={{ height: 15 }} />
-        <Text>Or</Text>
-        <View style={{ height: 15 }} />
-        <Text>Playlist ID</Text>
-        <View style={{ height: 15 }} />
-        <TextInput
-          style={{ borderWidth: 1 }}
-          placeholder="Playlist ID"
-          onChangeText={setId}
-        />
-        <View style={{ height: 15 }} />
-        <Button title="Submit" onPress={loginWithPlaylistId} />
+    <ScrollView>
+      <View
+        style={{
+          minHeight: Dimensions.get('window').height - StatusBar.currentHeight,
+        }}>
+        <View style={styles.body}>
+          <Text>Account</Text>
+          <View style={{ height: 15 }} />
+          <TextInput
+            style={{ borderWidth: 1 }}
+            placeholder="Username"
+            onChangeText={(username) => onChangeText('username', username)}
+          />
+          <View style={{ height: 15 }} />
+          <TextInput
+            style={{ borderWidth: 1 }}
+            placeholder="Password"
+            onChangeText={(password) => onChangeText('password', password)}
+          />
+          <View style={{ height: 15 }} />
+          <TextInput
+            style={{ borderWidth: 1 }}
+            placeholder="Server"
+            onChangeText={(server) => onChangeText('server', server)}
+          />
+          <View style={{ height: 15 }} />
+          <Button title="Submit" onPress={submitFormData} />
+          <View style={{ height: 15 }} />
+          <Text>Or</Text>
+          <View style={{ height: 15 }} />
+          <Text>URL M3U file</Text>
+          <View style={{ height: 15 }} />
+          <TextInput
+            style={{ borderWidth: 1 }}
+            placeholder="url"
+            onChangeText={setUrl}
+          />
+          <View style={{ height: 15 }} />
+          <Button title="Submit" onPress={submitUrl} />
+          <View style={{ height: 15 }} />
+          <Text>Or</Text>
+          <View style={{ height: 15 }} />
+          <Text>Playlist ID</Text>
+          <View style={{ height: 15 }} />
+          <TextInput
+            style={{ borderWidth: 1 }}
+            placeholder="Playlist ID"
+            onChangeText={setId}
+          />
+          <View style={{ height: 15 }} />
+          <Button title="Submit" onPress={loginWithPlaylistId} />
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -119,7 +132,6 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     paddingHorizontal: 20,
-    alignItems: 'center',
     justifyContent: 'center',
   },
 });

@@ -1,4 +1,5 @@
 import { API_URL } from '@env';
+import { receiveData } from './states/app';
 import { Playlist } from './types';
 
 const routes = {
@@ -6,9 +7,14 @@ const routes = {
     `playlist?playlistId=${playlistId}&country=${country}`,
 };
 
-const getPlaylist = (playlistId: string): Promise<Playlist> =>
+const fetchPlaylist = (playlistId: string): Promise<Playlist> =>
   fetch(`${API_URL}/${routes.getPlaylist(playlistId, 'fr')}`)
     .then((result) => result.json())
     .catch(console.log);
 
-export { routes, getPlaylist };
+const getAndReceivePlaylist = async (playlistId: string): Promise<Playlist> => {
+  const data: Playlist = await fetchPlaylist(playlistId);
+  return receiveData(data);
+};
+
+export { routes, fetchPlaylist, getAndReceivePlaylist };

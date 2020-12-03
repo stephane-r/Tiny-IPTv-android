@@ -1,32 +1,24 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { useAsyncStorage } from 'use-async-storage';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Screen } from '../enums/Screen';
 import { Playlist as PlaylistEnum } from '../enums/Playlist';
-import { receiveData, useApp } from '../states/app';
-import { getPlaylist } from '../api';
+import { resetState, useApp } from '../states/app';
 import TabScreen from './Tab';
 
 const Tab = createMaterialTopTabNavigator();
 
 const HomeScreen = ({ navigation }) => {
-  const [playlistId, setValue] = useAsyncStorage<string>(PlaylistEnum.id);
+  const [, setValue] = useAsyncStorage<string>(PlaylistEnum.id);
   const app = useApp();
 
   const onClearField = async () => {
-    await navigation.navigate(Screen.Login);
+    resetState();
     setValue(null);
+    await navigation.navigate(Screen.Login);
   };
-
-  useEffect(() => {
-    getPlaylist(playlistId).then(receiveData);
-  }, [playlistId]);
-
-  if (!playlistId) {
-    return <View />;
-  }
 
   return (
     <View style={styles.body}>
