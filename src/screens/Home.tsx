@@ -1,44 +1,36 @@
 import React from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
-import { useAsyncStorage } from 'use-async-storage';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Screen } from '../enums/Screen';
-import { Playlist as PlaylistEnum } from '../enums/Playlist';
-import { resetState, useApp } from '../states/app';
 import TabScreen from './Tab';
+import useAuth from '../hooks/useAuth';
+import { useApp } from '../states/app';
 
 const Tab = createMaterialTopTabNavigator();
 
-const HomeScreen = ({ navigation }) => {
-  const [, setValue] = useAsyncStorage<string>(PlaylistEnum.id);
-  const app = useApp();
+const TAB_BAR_OPTIONS = {
+  scrollEnabled: true,
+  tabStyle: {
+    width: 100,
+  },
+  showIcon: true,
+  showLabel: false,
+};
 
-  const onClearField = async () => {
-    resetState();
-    setValue(null);
-    await navigation.navigate(Screen.Login);
-  };
+const HomeScreen: React.FC = ({ navigation }) => {
+  const app = useApp();
+  const { logout } = useAuth();
 
   return (
     <View style={styles.body}>
-      <Button title="Logout" onPress={onClearField} />
+      <Button title="Logout" onPress={logout} />
       <Button
         title="Favoris"
         onPress={() => navigation.navigate(Screen.Favoris)}
       />
       {app?.categories ? (
-        <Tab.Navigator
-          lazy
-          tabBarOptions={{
-            scrollEnabled: true,
-            tabStyle: {
-              width: 100,
-            },
-            showIcon: true,
-            showLabel: false,
-          }}
-          tabBarPosition="bottom">
+        <Tab.Navigator lazy tabBarOptions={TAB_BAR_OPTIONS}>
           {app.categories.map((c) => (
             <Tab.Screen
               key={c}

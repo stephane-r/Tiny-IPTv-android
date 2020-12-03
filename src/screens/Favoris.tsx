@@ -1,10 +1,9 @@
 import React from 'react';
 import { Button, Text, View } from 'react-native';
-import { useAsyncStorage } from 'use-async-storage';
-import { Playlist } from '../enums/Playlist';
+import { useFavoris } from '../hooks/useFavoris';
 
 const FavorisScreen = ({ navigation }) => {
-  const [favoris] = useAsyncStorage(Playlist.Favoris);
+  const { favoris, addOrRemoveFromFavoris, clearFavoris } = useFavoris();
 
   if (!favoris) {
     return <Text>Loading favoris...</Text>;
@@ -17,8 +16,12 @@ const FavorisScreen = ({ navigation }) => {
   return (
     <View>
       <Button title="back" onPress={() => navigation.goBack()} />
+      <Button title="Clear all favoris" onPress={clearFavoris} />
       {favoris.map((f) => (
-        <Text key={f}>{f}</Text>
+        <View key={f.name}>
+          <Button title="Remove" onPress={() => addOrRemoveFromFavoris(f)} />
+          <Text key={f}>{f?.name}</Text>
+        </View>
       ))}
     </View>
   );

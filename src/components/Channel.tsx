@@ -13,7 +13,7 @@ import { Channel as ChannelType } from '../types';
 const Channel: React.FC = ({
   item,
   addOrRemoveFromFavoris,
-  favoris,
+  favorisIds,
 }: {
   item: ChannelType;
   addOrRemoveFromFavoris: (name: string) => void;
@@ -31,11 +31,11 @@ const Channel: React.FC = ({
       <View style={{ flex: 1 }}>
         <Button
           title={
-            favoris?.includes(item.name)
+            favorisIds?.includes(item.name)
               ? 'Remove from favoris'
               : 'Add to favoris'
           }
-          onPress={() => addOrRemoveFromFavoris(item.name)}
+          onPress={() => addOrRemoveFromFavoris(item)}
         />
         <Image
           source={{

@@ -1,8 +1,12 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import VlcPlayer from 'react-native-vlc-player';
 
-const Player = ({ source }) => (
+interface PlayerProps {
+  source: string;
+}
+
+const Player = ({ source }: PlayerProps) => (
   <VlcPlayer
     style={styles.video}
     paused={false}
@@ -17,8 +21,8 @@ const Player = ({ source }) => (
 
 const styles = StyleSheet.create({
   video: {
-    width: 300,
-    height: 200,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
 });
 

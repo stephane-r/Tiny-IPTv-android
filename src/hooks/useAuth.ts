@@ -3,6 +3,7 @@ import { useAsyncStorage } from 'use-async-storage';
 import { getAndReceivePlaylist } from '../api';
 import { Playlist } from '../enums/Playlist';
 import { Screen } from '../enums/Screen';
+import { resetState } from '../states/app';
 import { LoginFormData } from '../types';
 import generateLoginUrl from '../utils/generateLoginUrl';
 
@@ -55,10 +56,17 @@ const useAuth = (): UseAuthProps => {
     return login(url);
   };
 
+  const logout = (): Promise<void> => {
+    resetState();
+    setPlaylistId(null);
+    navigation.navigate(Screen.Login);
+  };
+
   return {
     login,
     loginWithPlaylistId,
     submitFormData,
+    logout,
   };
 };
 
