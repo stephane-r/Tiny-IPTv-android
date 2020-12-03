@@ -16,8 +16,8 @@ const HomeScreen = ({ navigation }) => {
   const app = useApp();
 
   const onClearField = async () => {
-    await setValue(null);
-    navigation.navigate(Screen.Login);
+    await navigation.navigate(Screen.Login);
+    setValue(null);
   };
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const HomeScreen = ({ navigation }) => {
                 tabBarIcon: () => <Icon name="api" size={25} color="#000" />,
               }}
               initialParams={{
-                category: c,
+                data: app.data[c],
               }}
             />
           ))}
