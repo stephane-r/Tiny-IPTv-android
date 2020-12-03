@@ -9,17 +9,10 @@ import {
   Dimensions,
   StatusBar,
 } from 'react-native';
-import { useAsyncStorage } from 'use-async-storage';
-import { getAndReceivePlaylist } from '../api';
-import { Playlist } from '../enums/Playlist';
-import { Screen } from '../enums/Screen';
+import useAuth from '../hooks/useAuth';
 import { LoginFormData } from '../types';
 
-const generateLoginUrl = ({ server, username, password }: LoginFormData) =>
-  `${server}/get.php?username=${username}&password=${password}&type=m3u_plus&output=ts`;
-
-const LoginScreen = ({ navigation }) => {
-  const [, setPlaylistId] = useAsyncStorage<string | null>(Playlist.id, null);
+const LoginScreen: React.FC = () => {
   const [formData, setFormData] = useState<LoginFormData>({
     username: '',
     password: '',
@@ -27,48 +20,13 @@ const LoginScreen = ({ navigation }) => {
   });
   const [url, setUrl] = useState<null | string>(null);
   const [id, setId] = useState<null | string>(null);
-
-  const submitUrl = async (serverUrl: string = url): Promise<void> => {
-    if (serverUrl === null || serverUrl === '') {
-      return alert('Nop nop');
-    }
-
-    try {
-      // TODO: maybe try to change API from POST to GET for remove headers, body and method ? Just request more simply ?
-      const request = await fetch('http://192.168.122.1:1500/playlist', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          accept: 'application/json',
-        },
-        body: JSON.stringify({
-          url: serverUrl,
-        }),
-      });
-      const response = await request.json();
-      await setPlaylistId(response.playlistId);
-      await getAndReceivePlaylist(response.playlistId);
-
-      return navigation.navigate(Screen.Home);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { login, loginWithPlaylistId, submitFormData } = useAuth();
 
   const onChangeText = (key: string, value: string): void =>
     setFormData({
       ...formData,
       [key]: value,
     });
-
-  const submitFormData = (): void => submitUrl(generateLoginUrl(formData));
-
-  const loginWithPlaylistId = async () => {
-    await getAndReceivePlaylist(id);
-    await setPlaylistId(id);
-
-    return navigation.navigate(Screen.Home);
-  };
 
   return (
     <ScrollView>
@@ -97,7 +55,7 @@ const LoginScreen = ({ navigation }) => {
             onChangeText={(server) => onChangeText('server', server)}
           />
           <View style={{ height: 15 }} />
-          <Button title="Submit" onPress={submitFormData} />
+          <Button title="Submit" onPress={() => submitFormData(formData)} />
           <View style={{ height: 15 }} />
           <Text>Or</Text>
           <View style={{ height: 15 }} />
@@ -109,7 +67,7 @@ const LoginScreen = ({ navigation }) => {
             onChangeText={setUrl}
           />
           <View style={{ height: 15 }} />
-          <Button title="Submit" onPress={submitUrl} />
+          <Button title="Submit" onPress={() => login(url)} />
           <View style={{ height: 15 }} />
           <Text>Or</Text>
           <View style={{ height: 15 }} />
@@ -121,7 +79,7 @@ const LoginScreen = ({ navigation }) => {
             onChangeText={setId}
           />
           <View style={{ height: 15 }} />
-          <Button title="Submit" onPress={loginWithPlaylistId} />
+          <Button title="Submit" onPress={() => loginWithPlaylistId(id)} />
         </View>
       </View>
     </ScrollView>
