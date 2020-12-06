@@ -1,11 +1,12 @@
 import { useAsyncStorage } from 'use-async-storage';
 import { Playlist } from '../enums/Playlist';
 import { Channel } from '../types';
+import { setFavoris as setFavorisState } from '../states/app';
 
 interface UseFavorisHook {
   favoris: Channel[];
   favorisIds: string[];
-  addOrRemoveFromFavoris: (name: string) => void;
+  addOrRemoveFromFavoris: (channel: Channel) => void;
   clearFavoris: () => void;
 }
 
@@ -17,21 +18,34 @@ const useFavoris = (): UseFavorisHook => {
   );
 
   const addOrRemoveFromFavoris = (channel: Channel): void => {
-    if (favorisIds.includes(channel.name)) {
-      const favorisUpdated = favoris.filter((f) => f.name !== channel.name);
-      const favorisIdsUpdated = favorisIds.filter((id) => id !== channel.name);
+    let favorisUpdated = [];
+    let favorisIdsUpdated = [];
 
-      setFavoris(favorisUpdated);
-      return setFavorisIds(favorisIdsUpdated);
+    if (favorisIds.includes(channel.name)) {
+      favorisUpdated = favoris.filter((f) => f.name !== channel.name);
+      favorisIdsUpdated = favorisIds.filter((id) => id !== channel.name);
+    } else {
+      favorisUpdated = [...favoris, channel];
+      favorisIdsUpdated = [...favorisIds, channel.name];
     }
 
-    setFavoris([...favoris, channel]);
-    return setFavorisIds([...favorisIds, channel.name]);
+    setFavoris(favorisUpdated);
+    setFavorisIds(favorisIdsUpdated);
+
+    return setFavorisState({
+      data: favorisUpdated,
+      ids: favorisIdsUpdated,
+    });
   };
 
   const clearFavoris = (): void => {
     setFavoris([]);
     setFavorisIds([]);
+
+    return setFavorisState({
+      data: [],
+      ids: [],
+    });
   };
 
   return {

@@ -1,28 +1,41 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { Text, View } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import TabScreen from './Tab';
-import { useApp } from '../states/app';
-import Navigation from '../components/Navigation';
+import { useApp, AppState, showDialogFavoris, setFavoris } from '../states/app';
 import FavorisScreen from './Favoris';
 import { Screen } from '../enums/Screen';
-import TabBar, { TAB_ICONS } from '../components/TabBar';
+import TabBar from '../components/TabBar';
+import DialogFavoris from '../components/DialogFavoris';
+import AsyncStorage from '@react-native-community/async-storage';
+import { Playlist } from '../enums/Playlist';
 
 const Tab = createMaterialTopTabNavigator();
 
 const HomeScreen: React.FC = () => {
-  const app = useApp();
+  const app: AppState = useApp();
+
+  useEffect(() => {
+    Promise.all([
+      AsyncStorage.getItem(Playlist.Favoris),
+      AsyncStorage.getItem(Playlist.FavorisIds),
+    ]).then(([favoris, favorisIds]) => {
+      setFavoris({
+        ids: JSON.parse(favorisIds) ?? [],
+        data: JSON.parse(favoris) ?? [],
+      });
+    });
+  }, []);
 
   return (
-    <View style={styles.body}>
-      <Navigation />
+    <View style={{ flex: 1 }}>
       {app?.categories ? (
         <Tab.Navigator
           lazy
           tabBar={(props) => <TabBar {...props} />}
           tabBarPosition="bottom">
-          {app.categories.map((c, index) => (
+          <Tab.Screen name={Screen.Favoris} component={FavorisScreen} />
+          {app.categories.map((c) => (
             <Tab.Screen
               key={c}
               name={c}
@@ -33,31 +46,18 @@ const HomeScreen: React.FC = () => {
               }}
             />
           ))}
-          <Tab.Screen name={Screen.Favoris} component={FavorisScreen} />
         </Tab.Navigator>
       ) : (
         <Text>Loading data...</Text>
       )}
+      {app?.dialog ? (
+        <DialogFavoris
+          visible={app.dialog.favoris.isOpen}
+          toggleDialog={showDialogFavoris}
+        />
+      ) : null}
     </View>
   );
 };
-
-// const TAB_BAR_OPTIONS = {
-//   scrollEnabled: true,
-//   tabStyle: {
-//     width: 100,
-//   },
-//   activeTintColor: 'white',
-//   inactiveTintColor: 'white',
-//   showIcon: true,
-//   style: { height: 100, alignItems: 'center', backgroundColor: '#1d1d1d' },
-// };
-
-const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    backgroundColor: '#1d1d1d',
-  },
-});
 
 export default HomeScreen;

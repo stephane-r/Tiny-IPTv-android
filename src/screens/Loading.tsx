@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import { getAndReceivePlaylist } from '../api';
 import { Playlist } from '../enums/Playlist';
 import { Screen } from '../enums/Screen';
@@ -26,7 +27,7 @@ const LoadingScreen = ({ navigation }) => {
 
   return (
     <View style={styles.body}>
-      <Text>Loading app...</Text>
+      <ActivityIndicator size="large" />
     </View>
   );
 };

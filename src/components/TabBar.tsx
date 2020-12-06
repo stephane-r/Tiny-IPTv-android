@@ -1,11 +1,30 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import { Dimensions, TouchableNativeFeedback, View } from 'react-native';
+import {
+  Dimensions,
+  StatusBar,
+  StyleSheet,
+  TouchableNativeFeedback,
+  View,
+} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import useAuth from '../hooks/useAuth';
 
 const TAB_BAR_WIDTH = 60;
-const TAB_ICONS = ['api', 'api', 'api', 'api', 'api', 'api', 'sports-football'];
+const TAB_ICONS = [
+  'favorite',
+  'ondemand-video',
+  'ondemand-video',
+  'ondemand-video',
+  'ondemand-video',
+  'ondemand-video',
+  'ondemand-video',
+  'sports-football',
+];
 
 const TabBar = ({ state, descriptors, navigation }) => {
+  const { logout } = useAuth();
   const focusedOptions = descriptors[state.routes[state.index].key].options;
 
   if (focusedOptions.tabBarVisible === false) {
@@ -19,9 +38,8 @@ const TabBar = ({ state, descriptors, navigation }) => {
         position: 'absolute',
         top: 0,
         left: 0,
-        backgroundColor: '#1d1d1d',
         width: TAB_BAR_WIDTH,
-        height: Dimensions.get('window').height - 150,
+        height: Dimensions.get('window').height - StatusBar.currentHeight,
       }}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
@@ -59,27 +77,39 @@ const TabBar = ({ state, descriptors, navigation }) => {
             accessibilityState={isFocused ? { selected: true } : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}
             onPress={onPress}
-            onLongPress={onLongPress}
-            style={{ flex: 1 }}>
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: isFocused ? 'white' : 'transparent',
-              }}>
+            onLongPress={onLongPress}>
+            <LinearGradient
+              style={styles.item}
+              colors={
+                isFocused
+                  ? ['transparent', '#5a5a5a', 'transparent']
+                  : ['transparent', 'transparent']
+              }>
               <Icon
                 name={TAB_ICONS[index]}
                 size={25}
-                color={isFocused ? '#1d1d1d' : '#3b3b3b'}
+                color={isFocused ? '#b7a742' : '#3b3b3b'}
               />
-            </View>
+            </LinearGradient>
           </TouchableNativeFeedback>
         );
       })}
+      <TouchableNativeFeedback accessibilityRole="button" onPress={logout}>
+        <View style={styles.item}>
+          <Icon name="api" size={25} color="#3b3b3b" />
+        </View>
+      </TouchableNativeFeedback>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  item: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 export default TabBar;
 export { TAB_BAR_WIDTH, TAB_ICONS };

@@ -1,43 +1,37 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { useFavoris } from '../hooks/useFavoris';
+import { useApp } from '../states/app';
 import { Channel as ChannelType } from '../types';
 import Channel from './Channel';
+import Spacer from './Spacer';
+import Subheading from './Subheading';
 
 const ChannelGroup: React.FC = ({ item }: { item: ChannelType }) => {
-  const { addOrRemoveFromFavoris, favorisIds } = useFavoris();
+  const app = useApp();
 
   const renderChannel = (props) => (
     <Channel
       item={props.item}
-      addOrRemoveFromFavoris={addOrRemoveFromFavoris}
-      favorisIds={favorisIds}
+      isFavoris={app.favoris.ids.includes(props.item.name)}
     />
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={{ fontWeight: 'bold', paddingLeft: 15, color: 'white' }}>
+    <View>
+      <Subheading>
         {item.title.replace(/[^a-zA-Z0-9]/g, '').replace('FR', '')}
-      </Text>
-      <View style={{ height: 15 }} />
+      </Subheading>
+      <Spacer height={15} />
       <FlatList
         horizontal
         data={item.items}
         renderItem={renderChannel}
         keyExtractor={({ name }) => name}
       />
-      <View style={{ height: 40 }} />
+      <Spacer height={40} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    paddingLeft: 15,
-    backgroundColor: '#1d1d1d',
-  },
-});
 
 export default ChannelGroup;

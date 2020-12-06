@@ -7,18 +7,21 @@ import LoadingScreen from '../screens/Loading';
 import PlayerScreen from '../screens/Player';
 import LoginScreen from '../screens/Login';
 import HomeScreen from '../screens/Home';
+import { Provider as PaperProvider } from 'react-native-paper';
 
 const Stack = createStackNavigator();
 
 const App = () => (
-  <NavigationContainer>
-    <Stack.Navigator headerMode="none" initialRouteName={Screen.Loading}>
-      <Stack.Screen name={Screen.Loading} component={LoadingScreen} />
-      <Stack.Screen name={Screen.Login} component={LoginScreen} />
-      <Stack.Screen name={Screen.Home} component={HomeScreen} />
-      <Stack.Screen name={Screen.Player} component={PlayerScreen} />
-    </Stack.Navigator>
-  </NavigationContainer>
+  <PaperProvider>
+    <NavigationContainer>
+      <Stack.Navigator headerMode="none" initialRouteName={Screen.Loading}>
+        <Stack.Screen name={Screen.Loading} component={LoadingScreen} />
+        <Stack.Screen name={Screen.Login} component={LoginScreen} />
+        <Stack.Screen name={Screen.Home} component={HomeScreen} />
+        <Stack.Screen name={Screen.Player} component={PlayerScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  </PaperProvider>
 );
 
 export default App;
