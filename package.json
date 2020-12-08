@@ -3,12 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "info": "react-native info",
-    "android": "./scripts/android-run.sh",
-    "ios": "react-native run-ios",
     "start": "react-native start --reset-cache",
-    "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "android": "./scripts/android-run.sh",
+    "android:build": "./scripts/android-build.sh",
+    "info": "react-native info"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.12.1",
