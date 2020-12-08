@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { useAsyncStorage } from 'use-async-storage';
+import { API_URL } from '@env';
 import { getAndReceivePlaylist } from '../api';
 import { Playlist } from '../enums/Playlist';
 import { Screen } from '../enums/Screen';
@@ -24,7 +25,7 @@ const useAuth = (): UseAuthProps => {
 
     try {
       // TODO: maybe try to change API from POST to GET for remove headers, body and method ? Just request more simply ?
-      const request = await fetch('http://192.168.122.1:1500/playlist', {
+      const request = await fetch(`${API_URL}/playlist`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

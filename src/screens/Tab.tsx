@@ -1,5 +1,5 @@
 import { useRoute } from '@react-navigation/native';
-import React from 'react';
+import React, { memo } from 'react';
 import { FlatList, View } from 'react-native';
 import { Channel as ChannelType } from '../types';
 import ChannelGroup from '../components/ChannelGroup';
@@ -24,4 +24,4 @@ const TabScreen: React.FC = () => {
   );
 };
 
-export default TabScreen;
+export default memo(TabScreen);

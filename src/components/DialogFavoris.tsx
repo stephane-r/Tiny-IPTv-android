@@ -5,9 +5,10 @@ import { AppState, toggleDialogFavoris, useApp } from '../states/app';
 
 const DialogFavoris = () => {
   const app: AppState = useApp();
-  const { addOrRemoveFromFavoris, favorisIds } = useFavoris();
+  const { addOrRemoveFromFavoris } = useFavoris();
+  const isFavoris = app.favoris.ids.includes(app.dialog.favoris.data?.name);
 
-  const addToFavoris = (): void => {
+  const onPress = (): void => {
     if (app.dialog.favoris.data.name) {
       addOrRemoveFromFavoris(app.dialog.favoris.data);
       toggleDialogFavoris(false, null);
@@ -21,20 +22,20 @@ const DialogFavoris = () => {
         onDismiss={() => toggleDialogFavoris(false, null)}
         style={{ maxWidth: 600, width: '100%', alignSelf: 'center' }}>
         <Dialog.Title>
-          {favorisIds.includes(app.dialog.favoris.data?.name)
-            ? 'Remove from favoris'
-            : 'Add to favoris'}
+          {isFavoris ? 'Remove from favoris' : 'Add to favoris'}
         </Dialog.Title>
         <Dialog.Content>
           <Paragraph>
-            Do you want add [CHANNEL NAME] to your favoris ?
+            Do you want {isFavoris ? 'remove' : 'add'}{' '}
+            {app.dialog.favoris.data?.name} {isFavoris ? 'from' : 'to'} your
+            favoris ?
           </Paragraph>
         </Dialog.Content>
         <Dialog.Actions>
           <Button onPress={() => toggleDialogFavoris(false, null)}>
             Cancel
           </Button>
-          <Button onPress={addToFavoris}>Add</Button>
+          <Button onPress={onPress}>{isFavoris ? 'Remove' : 'Add'}</Button>
         </Dialog.Actions>
       </Dialog>
     </Portal>

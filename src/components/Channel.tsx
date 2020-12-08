@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { memo } from 'react';
 import {
   ImageBackground,
+  Platform,
   StyleSheet,
   TouchableNativeFeedback,
   View,
@@ -10,7 +11,7 @@ import { Text } from 'react-native-paper';
 import { Screen } from '../enums/Screen';
 import { toggleDialogFavoris } from '../states/app';
 import { Channel as ChannelType } from '../types';
-import IconFavoris from './IconFavoris';
+import { IconFavoris, IconFavorisButton } from './IconFavoris';
 
 const Channel: React.FC = ({
   item,
@@ -21,27 +22,36 @@ const Channel: React.FC = ({
 }) => {
   const navigation = useNavigation();
 
+  const openDialogFavoris = () => toggleDialogFavoris(true, item);
+
   return (
-    <TouchableNativeFeedback
-      onPress={() =>
-        navigation.navigate(Screen.Player, {
-          source: item.url,
-        })
-      }
-      onLongPress={() => toggleDialogFavoris(true, item)}>
-      <View style={styles.container}>
-        <ImageBackground
-          source={{
-            uri: item.tvg.logo
-              ? item.tvg.logo
-              : 'https://www.semencesdefrance.com/wp-content/uploads/2020/01/placeholder.png',
-          }}
-          style={{ width: 160, height: 80 }}
-        />
-        {isFavoris && <IconFavoris />}
-        <Text style={styles.name}>{item.name}</Text>
-      </View>
-    </TouchableNativeFeedback>
+    <>
+      {Platform.isTV && isFavoris ? (
+        <IconFavoris />
+      ) : (
+        <IconFavorisButton onPress={openDialogFavoris} isActive={isFavoris} />
+      )}
+      <TouchableNativeFeedback
+        onPress={() =>
+          navigation.navigate(Screen.Player, {
+            source: item.url,
+          })
+        }
+        onLongPress={openDialogFavoris}>
+        <View style={styles.container}>
+          <ImageBackground
+            source={{
+              uri: item.tvg.logo
+                ? item.tvg.logo
+                : 'https://www.semencesdefrance.com/wp-content/uploads/2020/01/placeholder.png',
+            }}
+            style={{ width: 160, height: 80 }}
+          />
+          {/* {isFavoris && <IconFavoris />} */}
+          <Text style={styles.name}>{item.name}</Text>
+        </View>
+      </TouchableNativeFeedback>
+    </>
   );
 };
 
@@ -75,4 +85,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Channel;
+export default memo(Channel);

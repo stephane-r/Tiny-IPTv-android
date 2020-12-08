@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Spacer from './Spacer';
@@ -35,4 +35,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Layout;
+export default memo(Layout);

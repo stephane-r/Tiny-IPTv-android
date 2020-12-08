@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {
   Dimensions,
@@ -11,8 +10,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import useAuth from '../hooks/useAuth';
 
-const TAB_BAR_WIDTH = 60;
-const TAB_ICONS = [
+const TAB_BAR_WIDTH: number = 60;
+const TAB_ICONS: string[] = [
   'favorite',
   'ondemand-video',
   'ondemand-video',
@@ -23,61 +22,22 @@ const TAB_ICONS = [
   'sports-football',
 ];
 
-const TabBar = ({ state, descriptors, navigation }) => {
+const TabBar = ({ state, navigation }) => {
   const { logout } = useAuth();
-  const focusedOptions = descriptors[state.routes[state.index].key].options;
-
-  if (focusedOptions.tabBarVisible === false) {
-    return null;
-  }
 
   return (
-    <View
-      style={{
-        flexDirection: 'column',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: TAB_BAR_WIDTH,
-        height: Dimensions.get('window').height - StatusBar.currentHeight,
-      }}>
+    <View style={styles.list}>
       {state.routes.map((route, index) => {
-        const { options } = descriptors[route.key];
-        const label =
-          options.tabBarLabel !== undefined
-            ? options.tabBarLabel
-            : options.title !== undefined
-            ? options.title
-            : route.name;
-
         const isFocused = state.index === index;
 
         const onPress = (): void => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-            canPreventDefault: true,
-          });
-
-          if (!isFocused && !event.defaultPrevented) {
+          if (!isFocused) {
             navigation.navigate(route.name);
           }
         };
 
-        const onLongPress = (): void =>
-          navigation.emit({
-            type: 'tabLongPress',
-            target: route.key,
-          });
-
         return (
-          <TouchableNativeFeedback
-            key={label}
-            accessibilityRole="button"
-            accessibilityState={isFocused ? { selected: true } : {}}
-            accessibilityLabel={options.tabBarAccessibilityLabel}
-            onPress={onPress}
-            onLongPress={onLongPress}>
+          <TouchableNativeFeedback key={route.key} onPress={onPress}>
             <LinearGradient
               style={styles.item}
               colors={
@@ -104,6 +64,14 @@ const TabBar = ({ state, descriptors, navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  list: {
+    flexDirection: 'column',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: TAB_BAR_WIDTH,
+    height: Dimensions.get('window').height - StatusBar.currentHeight,
+  },
   item: {
     flex: 1,
     alignItems: 'center',

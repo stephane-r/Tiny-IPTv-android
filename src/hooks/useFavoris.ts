@@ -4,8 +4,6 @@ import { Channel } from '../types';
 import { setFavoris as setFavorisState } from '../states/app';
 
 interface UseFavorisHook {
-  favoris: Channel[];
-  favorisIds: string[];
   addOrRemoveFromFavoris: (channel: Channel) => void;
   clearFavoris: () => void;
 }
@@ -49,8 +47,6 @@ const useFavoris = (): UseFavorisHook => {
   };
 
   return {
-    favoris,
-    favorisIds,
     addOrRemoveFromFavoris,
     clearFavoris,
   };
