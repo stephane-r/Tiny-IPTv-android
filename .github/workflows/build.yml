@@ -10,9 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install npm dependencies
-        run: |
-          npm install
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+      - name: Install dependencies
+      - run: npm install
       - name: Build Android Release
         run: |
           echo "${{ secrets.APP_KEYSTORE }}" > app.keystore.asc
