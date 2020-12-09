@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - develop
+# on:
+#     create:
+#         tags:
+#             - v*
 
 jobs:
   build-android:
