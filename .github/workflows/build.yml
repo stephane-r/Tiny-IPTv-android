@@ -15,6 +15,8 @@ jobs:
           npm install
       - name: Build Android Release
         run: |
+          echo "{{ secrets.APP_KEYSTORE }}" > app.keystore.asc
+          gpg -d --passphrase "{{ secrets.APP_KEYSTORE_PASSPHRASE }}" --batch app.keystore.asc > android/app/app.keystore
           cd android && ./gradlew assembleRelease -PMYAPP_UPLOAD_STORE_FILE='${{ secrets.MYAPP_UPLOAD_STORE_FILE }}' -PMYAPP_UPLOAD_KEY_ALIAS='${{ secrets.MYAPP_UPLOAD_KEY_ALIAS }}' -PMYAPP_UPLOAD_STORE_PASSWORD='${{ secrets.PMYAPP_UPLOAD_STORE_PASSWORD }}' -PMYAPP_UPLOAD_KEY_PASSWORD='${{ secrets.PMYAPP_UPLOAD_STORE_PASSWORD }}'
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
