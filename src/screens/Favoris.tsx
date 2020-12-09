@@ -9,7 +9,7 @@ import { useFavoris } from '../hooks/useFavoris';
 import { useApp } from '../states/app';
 
 const FavorisScreen = () => {
-  const { clearFavoris } = useFavoris();
+  const { addOrRemoveFromFavoris, clearFavoris } = useFavoris();
   const app = useApp();
   const favoris = app.favoris.data;
 
@@ -32,7 +32,11 @@ const FavorisScreen = () => {
           <View style={styles.list}>
             {favoris.map((f) => (
               <View key={f.name}>
-                <Channel item={f} isFavoris />
+                <Channel
+                  item={f}
+                  isFavoris
+                  addOrRemoveFromFavoris={addOrRemoveFromFavoris}
+                />
                 <Spacer height={30} />
               </View>
             ))}

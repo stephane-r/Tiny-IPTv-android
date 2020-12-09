@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { isTablet } from 'react-native-device-info';
 import LinearGradient from 'react-native-linear-gradient';
 import Spacer from './Spacer';
 import { TAB_BAR_WIDTH } from './TabBar';
@@ -25,7 +26,7 @@ const Layout: React.FC = ({ title, rightRender, children }) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingLeft: TAB_BAR_WIDTH * 1.8,
+    paddingLeft: isTablet() ? TAB_BAR_WIDTH * 1.8 : 0,
   },
   header: {
     flexDirection: 'row',
