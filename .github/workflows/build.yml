@@ -20,7 +20,7 @@ jobs:
           echo "${{ secrets.APP_KEYSTORE }}" > app.keystore.asc
           gpg -d --passphrase "${{ secrets.APP_KEYSTORE_PASSPHRASE }}" --batch app.keystore.asc > android/app/app.keystore
           cd android && ./gradlew assembleRelease -PMYAPP_UPLOAD_STORE_FILE='${{ secrets.MYAPP_UPLOAD_STORE_FILE }}' -PMYAPP_UPLOAD_KEY_ALIAS='${{ secrets.MYAPP_UPLOAD_KEY_ALIAS }}' -PMYAPP_UPLOAD_STORE_PASSWORD='${{ secrets.PMYAPP_UPLOAD_STORE_PASSWORD }}' -PMYAPP_UPLOAD_KEY_PASSWORD='${{ secrets.PMYAPP_UPLOAD_STORE_PASSWORD }}'
-      - name: Set env
+      - name: Set tag on GITHUB_ENV
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Upload release
         uses: svenstaro/upload-release-action@v2
