@@ -8,12 +8,6 @@ interface FavorisState {
 
 export interface AppState extends Playlist {
   favoris: FavorisState;
-  dialog: {
-    favoris: {
-      isOpen: boolean;
-      data: null;
-    };
-  };
 }
 
 const initialAppState: AppState = {
@@ -22,12 +16,6 @@ const initialAppState: AppState = {
   favoris: {
     ids: [],
     data: [],
-  },
-  dialog: {
-    favoris: {
-      isOpen: false,
-      data: null,
-    },
   },
 };
 
@@ -41,20 +29,6 @@ export const receiveData = (data: Playlist) =>
   setState((state: AppState) => ({
     ...state,
     ...data,
-  }));
-export const toggleDialogFavoris = (
-  isOpen: boolean = initialAppState.dialog.favoris.isOpen,
-  data: Channel = initialAppState.dialog.favoris.data,
-) =>
-  setState((state: AppState) => ({
-    ...state,
-    dialog: {
-      ...state.dialog,
-      favoris: {
-        isOpen,
-        data,
-      },
-    },
   }));
 export const setFavoris = (favoris: FavorisState) =>
   setState((state: AppState) => ({
