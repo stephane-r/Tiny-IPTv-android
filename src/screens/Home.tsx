@@ -4,19 +4,29 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { isTablet } from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import TabScreen from './Tab';
-import { useApp, AppState, showDialogFavoris, setFavoris } from '../states/app';
+import { useApp, AppState, setFavoris } from '../states/app';
 import FavorisScreen from './Favoris';
 import { Screen } from '../enums/Screen';
 import TabBar from '../components/TabBar';
-import DialogFavoris from '../components/DialogFavoris';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Playlist } from '../enums/Playlist';
+import { ActivityIndicator } from 'react-native-paper';
+import LinearGradient from 'react-native-linear-gradient';
 
 const Tab = createMaterialTopTabNavigator();
 
 const TAB_NAVIGATOR_PROPS = () => {
   const props = {
     lazy: true,
+    sceneContainerStyle: {
+      backgroundColor: 'transparent',
+    },
+    lazyPlaceholder: () => (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator color="white" size="large" />
+      </View>
+    ),
+    removeClippedSubviews: true,
     tabBarPosition: 'bottom',
   };
 
@@ -36,6 +46,8 @@ const TAB_NAVIGATOR_PROPS = () => {
   return props;
 };
 
+const GRADIENT_COLORS = ['#1d1d1d', '#5a5a5a'];
+
 const HomeScreen: React.FC = () => {
   const app: AppState = useApp();
 
@@ -52,7 +64,11 @@ const HomeScreen: React.FC = () => {
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
+    <LinearGradient
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+      style={{ flex: 1 }}
+      colors={GRADIENT_COLORS}>
       {app?.categories ? (
         <Tab.Navigator {...TAB_NAVIGATOR_PROPS()}>
           <Tab.Screen
@@ -80,13 +96,7 @@ const HomeScreen: React.FC = () => {
       ) : (
         <Text>Loading data...</Text>
       )}
-      {app?.dialog ? (
-        <DialogFavoris
-          visible={app.dialog.favoris.isOpen}
-          toggleDialog={showDialogFavoris}
-        />
-      ) : null}
-    </View>
+    </LinearGradient>
   );
 };
 
