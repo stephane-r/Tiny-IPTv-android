@@ -14,7 +14,7 @@ const initialAppState: AppState = {
     data: [],
   },
   snackbar: {
-    visible: true,
+    visible: false,
     message: '',
     buttonLabelClose: '',
   },
