@@ -36,3 +36,14 @@ export interface Channel {
   url: string;
   raw: string;
 }
+
+export interface FavorisState {
+  ids: string[];
+  data: Channel[];
+}
+
+export interface Snackbar {
+  visible: boolean;
+  message: string;
+  buttonLabelClose: string;
+}

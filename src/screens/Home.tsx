@@ -3,6 +3,8 @@ import { Text, View } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { isTablet } from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { ActivityIndicator } from 'react-native-paper';
+import LinearGradient from 'react-native-linear-gradient';
 import TabScreen from './Tab';
 import { useApp, AppState, setFavoris } from '../states/app';
 import FavorisScreen from './Favoris';
@@ -10,8 +12,6 @@ import { Screen } from '../enums/Screen';
 import TabBar from '../components/TabBar';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Playlist } from '../enums/Playlist';
-import { ActivityIndicator } from 'react-native-paper';
-import LinearGradient from 'react-native-linear-gradient';
 
 const Tab = createMaterialTopTabNavigator();
 

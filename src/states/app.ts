@@ -1,13 +1,9 @@
 import { createState, createHook } from '@zoontek/react-global-state';
-import { Channel, Playlist } from '../types';
-
-interface FavorisState {
-  ids: string[];
-  data: Channel[];
-}
+import { FavorisState, Playlist, Snackbar } from '../types';
 
 export interface AppState extends Playlist {
   favoris: FavorisState;
+  snackbar: Snackbar;
 }
 
 const initialAppState: AppState = {
@@ -16,6 +12,11 @@ const initialAppState: AppState = {
   favoris: {
     ids: [],
     data: [],
+  },
+  snackbar: {
+    visible: true,
+    message: '',
+    buttonLabelClose: '',
   },
 };
 
@@ -34,4 +35,28 @@ export const setFavoris = (favoris: FavorisState) =>
   setState((state: AppState) => ({
     ...state,
     favoris,
+  }));
+export const showSnakbar = ({
+  message,
+  buttonLabelClose = 'Close',
+}: {
+  message: string;
+  buttonLabelClose?: string;
+}) =>
+  setState((state: AppState) => ({
+    ...state,
+    snackbar: {
+      ...state.snackbar,
+      visible: true,
+      message,
+      buttonLabelClose,
+    },
+  }));
+export const closeSnackbar = () =>
+  setState((state: AppState) => ({
+    ...state,
+    snackbar: {
+      ...state.snackbar,
+      visible: false,
+    },
   }));

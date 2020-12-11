@@ -8,6 +8,7 @@ import PlayerScreen from '../screens/Player';
 import LoginScreen from '../screens/Login';
 import HomeScreen from '../screens/Home';
 import { Provider as PaperProvider } from 'react-native-paper';
+import Snackbar from './Snackbar';
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,7 @@ const App = () => (
         <Stack.Screen name={Screen.Player} component={PlayerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
+    <Snackbar />
   </PaperProvider>
 );
 
