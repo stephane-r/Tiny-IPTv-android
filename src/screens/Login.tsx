@@ -24,14 +24,6 @@ const LoginScreen: React.FC = () => {
   const [loginType, setLoginType] = useState<
     ACCOUNT_TYPE | M3U_FILE_TYPE | PLAYLIST_ID_TYPE
   >('account');
-  const [formData, setFormData] = useState<LoginFormData>({
-    username: '',
-    password: '',
-    server: '',
-  });
-  const [url, setUrl] = useState<null | string>(null);
-  const [id, setId] = useState<null | string>(null);
-  const { login, loginWithPlaylistId, submitFormData } = useAuth();
 
   const isAccountLoginType = loginType === ACCOUNT;
   const isM3uFileLoginType = loginType === M3U_FILE;
@@ -39,12 +31,6 @@ const LoginScreen: React.FC = () => {
 
   const buttonMode = (isActive: boolean): string =>
     isActive ? 'contained' : 'text';
-
-  const onChangeText = (key: string, value: string): void =>
-    setFormData({
-      ...formData,
-      [key]: value,
-    });
 
   return (
     <ScrollView>
@@ -70,34 +56,30 @@ const LoginScreen: React.FC = () => {
               Playlist ID
             </Button>
           </View>
-          {isAccountLoginType && (
-            <AcountLogin
-              onChangeText={onChangeText}
-              onSubmit={() => submitFormData(formData)}
-            />
-          )}
-          {isM3uFileLoginType && (
-            <M3uFileLogin onChangeText={setUrl} onSubmit={() => login(url)} />
-          )}
-          {isPlaylistIdLoginType && (
-            <PlaylistIdLogin
-              onChangeText={setId}
-              onSubmit={() => loginWithPlaylistId(id)}
-            />
-          )}
+          {isAccountLoginType && <AcountLogin />}
+          {isM3uFileLoginType && <M3uFileLogin />}
+          {isPlaylistIdLoginType && <PlaylistIdLogin />}
         </View>
       </View>
     </ScrollView>
   );
 };
 
-const AcountLogin = ({ onChangeText, onSubmit }) => {
-  const [loading, setLoading] = useState<boolean>(false);
+const AcountLogin = () => {
+  const [formData, setFormData] = useState<LoginFormData>({
+    username: '',
+    password: '',
+    server: '',
+  });
+  const { submitFormData, loading } = useAuth();
 
-  const onPress = (): void => {
-    setLoading(true);
-    return onSubmit();
-  };
+  const onChangeText = (key: string, value: string): void =>
+    setFormData({
+      ...formData,
+      [key]: value,
+    });
+
+  const onPress = (): void => submitFormData(formData);
 
   return (
     <>
@@ -131,13 +113,11 @@ const AcountLogin = ({ onChangeText, onSubmit }) => {
   );
 };
 
-const M3uFileLogin = ({ onChangeText, onSubmit }) => {
-  const [loading, setLoading] = useState<boolean>(false);
+const M3uFileLogin = () => {
+  const [url, setUrl] = useState<null | string>(null);
+  const { login, loading } = useAuth();
 
-  const onPress = (): void => {
-    setLoading(true);
-    return onSubmit();
-  };
+  const onPress = (): void => login(url);
 
   return (
     <>
@@ -145,7 +125,7 @@ const M3uFileLogin = ({ onChangeText, onSubmit }) => {
       <Subheading color="black">Account</Subheading>
       <View style={styles.form}>
         <Spacer height={15} />
-        <TextInput mode="outlined" label="url" onChangeText={onChangeText} />
+        <TextInput mode="outlined" label="url" onChangeText={setUrl} />
         <Spacer height={15} />
         <Button mode="contained" loading={loading} onPress={onPress}>
           Submit
@@ -155,13 +135,11 @@ const M3uFileLogin = ({ onChangeText, onSubmit }) => {
   );
 };
 
-const PlaylistIdLogin = ({ onChangeText, onSubmit }) => {
-  const [loading, setLoading] = useState<boolean>(false);
+const PlaylistIdLogin = () => {
+  const [playlistId, setPlaylistId] = useState(null);
+  const { loginWithPlaylistId, loading } = useAuth();
 
-  const onPress = (): void => {
-    setLoading(true);
-    return onSubmit();
-  };
+  const onPress = (): void => loginWithPlaylistId(playlistId);
 
   return (
     <>
@@ -172,7 +150,7 @@ const PlaylistIdLogin = ({ onChangeText, onSubmit }) => {
         <TextInput
           mode="outlined"
           label="Playlist ID"
-          onChangeText={onChangeText}
+          onChangeText={setPlaylistId}
         />
         <Spacer height={15} />
         <Button mode="contained" loading={loading} onPress={onPress}>

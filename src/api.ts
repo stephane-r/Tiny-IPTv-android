@@ -8,9 +8,9 @@ const routes = {
 };
 
 const fetchPlaylist = (playlistId: string): Promise<Playlist> =>
-  fetch(`${API_URL}/${routes.getPlaylist(playlistId, 'fr')}`)
-    .then((result) => result.json())
-    .catch(console.log);
+  fetch(`${API_URL}/${routes.getPlaylist(playlistId, 'fr')}`).then((result) =>
+    result.json(),
+  );
 
 const getAndReceivePlaylist = async (playlistId: string): Promise<Playlist> => {
   const data: Playlist = await fetchPlaylist(playlistId);
