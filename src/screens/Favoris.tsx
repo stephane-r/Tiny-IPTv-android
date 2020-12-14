@@ -7,10 +7,13 @@ import Layout from '../components/Layout';
 import Spacer from '../components/Spacer';
 import { useFavoris } from '../hooks/useFavoris';
 import { useApp } from '../states/app';
+import { version } from '../../package';
+import { useNavigation } from '@react-navigation/native';
 
 const FavorisScreen = () => {
   const { addOrRemoveFromFavoris, clearFavoris } = useFavoris();
   const app = useApp();
+  const navigation = useNavigation();
   const favoris = app.favoris.data;
 
   return (
@@ -19,12 +22,16 @@ const FavorisScreen = () => {
       rightRender={
         favoris &&
         favoris.length > 0 && (
-          <Button onPress={clearFavoris} color="white" mode="contained">
-            Remove all favoris
-          </Button>
+          <View style={styles.header}>
+            <Text style={styles.textVersion}>{version}</Text>
+            <Spacer width={20} />
+            <Button onPress={clearFavoris} color="white" mode="contained">
+              Remove all favoris
+            </Button>
+          </View>
         )
       }>
-      <View style={styles.spacer} />
+      <Spacer height={30} />
       {favoris.length === 0 ? (
         <FavorisEmpty title="Favoris is empty" />
       ) : (
@@ -36,6 +43,7 @@ const FavorisScreen = () => {
                   item={f}
                   isFavoris
                   addOrRemoveFromFavoris={addOrRemoveFromFavoris}
+                  navigation={navigation}
                 />
                 <Spacer height={30} />
               </View>
@@ -54,6 +62,10 @@ const FavorisEmpty = ({ title }) => (
 );
 
 const styles = StyleSheet.create({
+  header: { flexDirection: 'row', alignItems: 'center' },
+  textVersion: {
+    color: 'white',
+  },
   emptyContainer: {
     paddingLeft: 15,
   },
@@ -61,7 +73,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-  spacer: { height: 30 },
   list: { flexDirection: 'row', flexWrap: 'wrap' },
 });
 

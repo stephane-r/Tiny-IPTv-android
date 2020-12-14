@@ -45,5 +45,8 @@ export interface FavorisState {
 export interface Snackbar {
   visible: boolean;
   message: string;
-  buttonLabelClose: string;
+  action: {
+    label: string;
+    onPress: () => void;
+  };
 }

@@ -18,10 +18,7 @@ const Snackbar = () => {
     <SnackbarApp
       visible={snackbar.visible}
       onDismiss={() => null}
-      action={{
-        label: snackbar.buttonLabelClose,
-        onPress: closeSnackbar,
-      }}
+      action={snackbar.action}
       style={styles.snackbar}>
       {snackbar.message}
     </SnackbarApp>

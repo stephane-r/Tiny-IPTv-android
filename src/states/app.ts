@@ -16,7 +16,10 @@ const initialAppState: AppState = {
   snackbar: {
     visible: false,
     message: '',
-    buttonLabelClose: '',
+    action: {
+      label: 'Close',
+      onPress: closeSnackbar,
+    },
   },
 };
 
@@ -38,10 +41,10 @@ export const setFavoris = (favoris: FavorisState) =>
   }));
 export const showSnakbar = ({
   message,
-  buttonLabelClose = 'Close',
+  action = initialAppState.snackbar.action,
 }: {
   message: string;
-  buttonLabelClose?: string;
+  action: { label: string; onPress: () => void };
 }) =>
   setState((state: AppState) => ({
     ...state,
@@ -49,7 +52,7 @@ export const showSnakbar = ({
       ...state.snackbar,
       visible: true,
       message,
-      buttonLabelClose,
+      action,
     },
   }));
 export const closeSnackbar = () =>

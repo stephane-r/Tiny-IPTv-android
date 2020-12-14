@@ -33,6 +33,7 @@
     "react-native-tab-view": "^2.15.2",
     "react-native-vector-icons": "^7.1.0",
     "react-native-vlc-player": "^0.2.3",
+    "semver-compare": "^1.0.0",
     "use-async-storage": "^1.2.0"
   },
   "devDependencies": {
