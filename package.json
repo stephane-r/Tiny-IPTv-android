@@ -1,6 +1,6 @@
 {
   "name": "tiny-iptv",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
   "scripts": {
     "postversion": "RNV=android react-native-version",
