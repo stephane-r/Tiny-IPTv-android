@@ -12,6 +12,7 @@ import { Screen } from '../enums/Screen';
 import TabBar from '../components/TabBar';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Playlist } from '../enums/Playlist';
+import { useAsyncStorage } from 'use-async-storage';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -78,7 +79,7 @@ const HomeScreen: React.FC = () => {
             }}
             component={FavorisScreen}
           />
-          {app.categories.map((c) => (
+          {app.categoriesFiltered.map((c) => (
             <Tab.Screen
               key={c}
               name={c}

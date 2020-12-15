@@ -54,9 +54,16 @@ const TabBar = ({ state, navigation }) => {
           </TouchableNativeFeedback>
         );
       })}
+      <TouchableNativeFeedback
+        accessibilityRole="button"
+        onPress={() => navigation.navigate('Settings')}>
+        <View style={styles.item}>
+          <Icon name="settings" size={25} color="#3b3b3b" />
+        </View>
+      </TouchableNativeFeedback>
       <TouchableNativeFeedback accessibilityRole="button" onPress={logout}>
         <View style={styles.item}>
-          <Icon name="api" size={25} color="#3b3b3b" />
+          <Icon name="logout" size={25} color="#3b3b3b" />
         </View>
       </TouchableNativeFeedback>
     </View>
@@ -66,6 +73,7 @@ const TabBar = ({ state, navigation }) => {
 const styles = StyleSheet.create({
   list: {
     flexDirection: 'column',
+    justifyContent: 'center',
     position: 'absolute',
     top: 0,
     left: 0,
@@ -74,6 +82,7 @@ const styles = StyleSheet.create({
   },
   item: {
     flex: 1,
+    maxHeight: 120,
     alignItems: 'center',
     justifyContent: 'center',
   },

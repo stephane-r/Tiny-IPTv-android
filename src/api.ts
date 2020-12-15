@@ -1,5 +1,6 @@
 import { API_URL } from '@env';
-import { receiveData } from './states/app';
+import AsyncStorage from '@react-native-community/async-storage';
+import { receiveData, setHiddenCategories } from './states/app';
 import { Playlist } from './types';
 
 const routes = {
@@ -14,6 +15,10 @@ const fetchPlaylist = (playlistId: string): Promise<Playlist> =>
 
 const getAndReceivePlaylist = async (playlistId: string): Promise<Playlist> => {
   const data: Playlist = await fetchPlaylist(playlistId);
+  const hiddenCategories = await AsyncStorage.getItem('hiddenCategories');
+  setHiddenCategories(
+    data.categories.filter((c) => !hiddenCategories?.includes(c)),
+  );
   return receiveData(data);
 };
 

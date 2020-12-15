@@ -6,8 +6,18 @@ export interface AppState extends Playlist {
   snackbar: Snackbar;
 }
 
+export const closeSnackbar = () =>
+  setState((state: AppState) => ({
+    ...state,
+    snackbar: {
+      ...state.snackbar,
+      visible: false,
+    },
+  }));
+
 const initialAppState: AppState = {
   categories: null,
+  categoriesFiltered: null,
   data: {},
   favoris: {
     ids: [],
@@ -34,6 +44,11 @@ export const receiveData = (data: Playlist) =>
     ...state,
     ...data,
   }));
+export const setHiddenCategories = (categories: string[]) =>
+  setState((state: AppState) => ({
+    ...state,
+    categoriesFiltered: categories,
+  }));
 export const setFavoris = (favoris: FavorisState) =>
   setState((state: AppState) => ({
     ...state,
@@ -53,13 +68,5 @@ export const showSnakbar = ({
       visible: true,
       message,
       action,
-    },
-  }));
-export const closeSnackbar = () =>
-  setState((state: AppState) => ({
-    ...state,
-    snackbar: {
-      ...state.snackbar,
-      visible: false,
     },
   }));

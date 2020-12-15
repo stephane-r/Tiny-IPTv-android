@@ -19,6 +19,7 @@ interface UseAuthProps {
 const useAuth = (): UseAuthProps => {
   const [loading, setLoading] = useState<boolean>(false);
   const [, setPlaylistId] = useAsyncStorage<string | null>(Playlist.id, null);
+  const [, setFileUrl] = useAsyncStorage<null | string>('fileUrl', null);
   const navigation = useNavigation();
 
   const login = async (serverUrl: string): Promise<void> => {
@@ -45,6 +46,7 @@ const useAuth = (): UseAuthProps => {
       const response = await request.json();
       await setPlaylistId(response.playlistId);
       await getAndReceivePlaylist(response.playlistId);
+      await setFileUrl(serverUrl);
 
       return navigation.navigate(Screen.Home);
     } catch (error) {

@@ -10,6 +10,7 @@ import HomeScreen from '../screens/Home';
 import { Provider as PaperProvider } from 'react-native-paper';
 import Snackbar from './Snackbar';
 import useUpdateRelease from '../hooks/useUpdateRelease';
+import SettingsScreen from '../screens/Settings';
 
 const Stack = createStackNavigator();
 
@@ -19,11 +20,32 @@ const App = () => {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <Stack.Navigator headerMode="none" initialRouteName={Screen.Loading}>
-          <Stack.Screen name={Screen.Loading} component={LoadingScreen} />
-          <Stack.Screen name={Screen.Login} component={LoginScreen} />
-          <Stack.Screen name={Screen.Home} component={HomeScreen} />
-          <Stack.Screen name={Screen.Player} component={PlayerScreen} />
+        <Stack.Navigator initialRouteName={Screen.Loading}>
+          <Stack.Screen
+            name={Screen.Loading}
+            component={LoadingScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name={Screen.Login}
+            component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name={Screen.Home}
+            component={HomeScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name={Screen.Player}
+            component={PlayerScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Settings"
+            component={SettingsScreen}
+            options={{ headerShown: true }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
       <Snackbar />
