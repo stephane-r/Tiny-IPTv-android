@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { isTablet } from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -12,7 +12,7 @@ import { Screen } from '../enums/Screen';
 import TabBar from '../components/TabBar';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Playlist } from '../enums/Playlist';
-import { useAsyncStorage } from 'use-async-storage';
+import Player from '../components/Player';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -23,7 +23,7 @@ const TAB_NAVIGATOR_PROPS = () => {
       backgroundColor: 'transparent',
     },
     lazyPlaceholder: () => (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={styles.activityIndicator}>
         <ActivityIndicator color="white" size="large" />
       </View>
     ),
@@ -68,7 +68,7 @@ const HomeScreen: React.FC = () => {
     <LinearGradient
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
-      style={{ flex: 1 }}
+      style={styles.container}
       colors={GRADIENT_COLORS}>
       {app?.categories ? (
         <Tab.Navigator {...TAB_NAVIGATOR_PROPS()}>
@@ -97,8 +97,18 @@ const HomeScreen: React.FC = () => {
       ) : (
         <Text>Loading data...</Text>
       )}
+      <Player />
     </LinearGradient>
   );
 };
+
+const styles = StyleSheet.create({
+  activityIndicator: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  container: { flex: 1 },
+});
 
 export default HomeScreen;

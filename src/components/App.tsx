@@ -4,13 +4,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Screen } from '../enums/Screen';
 import LoadingScreen from '../screens/Loading';
-import PlayerScreen from '../screens/Player';
 import LoginScreen from '../screens/Login';
 import HomeScreen from '../screens/Home';
 import { Provider as PaperProvider } from 'react-native-paper';
 import Snackbar from './Snackbar';
 import useUpdateRelease from '../hooks/useUpdateRelease';
 import SettingsScreen from '../screens/Settings';
+import PlayerScreen from '../screens/Player';
 
 const Stack = createStackNavigator();
 
@@ -42,7 +42,7 @@ const App = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="Settings"
+            name={Screen.Settings}
             component={SettingsScreen}
             options={{ headerShown: true }}
           />

@@ -4,4 +4,5 @@ export enum Screen {
   Login = 'Login',
   Player = 'player',
   Favoris = 'favoris',
+  Settings = 'settings',
 }

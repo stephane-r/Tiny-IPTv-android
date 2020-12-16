@@ -4,6 +4,7 @@ import { FavorisState, Playlist, Snackbar } from '../types';
 export interface AppState extends Playlist {
   favoris: FavorisState;
   snackbar: Snackbar;
+  source: null | string;
 }
 
 export const closeSnackbar = () =>
@@ -31,6 +32,7 @@ const initialAppState: AppState = {
       onPress: closeSnackbar,
     },
   },
+  source: null,
 };
 
 const app: AppState = createState(initialAppState);
@@ -69,4 +71,10 @@ export const showSnakbar = ({
       message,
       action,
     },
+  }));
+
+export const setSource = (source: string) =>
+  setState((state: AppState) => ({
+    ...state,
+    source,
   }));

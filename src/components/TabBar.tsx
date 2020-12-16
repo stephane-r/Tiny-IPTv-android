@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Screen } from '../enums/Screen';
 import useAuth from '../hooks/useAuth';
 
 const TAB_BAR_WIDTH: number = 60;
@@ -56,7 +57,7 @@ const TabBar = ({ state, navigation }) => {
       })}
       <TouchableNativeFeedback
         accessibilityRole="button"
-        onPress={() => navigation.navigate('Settings')}>
+        onPress={() => navigation.navigate(Screen.Settings)}>
         <View style={styles.item}>
           <Icon name="settings" size={25} color="#3b3b3b" />
         </View>

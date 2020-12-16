@@ -9,6 +9,7 @@ import {
 import { isTablet } from 'react-native-device-info';
 import { Text } from 'react-native-paper';
 import { Screen } from '../enums/Screen';
+import { setSource } from '../states/app';
 import { Channel as ChannelType } from '../types';
 import { IconFavoris, IconFavorisButton } from './IconFavoris';
 
@@ -33,11 +34,7 @@ const Channel: React.FC = ({
       />
     )}
     <TouchableNativeFeedback
-      onPress={() =>
-        navigation.navigate(Screen.Player, {
-          source: item.url,
-        })
-      }
+      onPress={() => setSource(item.url)}
       onLongPress={() => addOrRemoveFromFavoris(item)}>
       <View style={styles.container}>
         <ImageBackground
