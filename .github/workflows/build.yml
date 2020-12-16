@@ -3,7 +3,7 @@ name: Build Android release
 on:
   create:
     tags:
-      - *
+      - v*
 
 jobs:
   build-android:
