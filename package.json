@@ -3,13 +3,11 @@
   "version": "0.1.5",
   "private": true,
   "scripts": {
-    "postversion": "RNV=android react-native-version",
+    "postversion": "RNV=android react-native-version && npm run changelog && git push && git push --tags",
     "start": "react-native start --reset-cache",
     "android": "./scripts/android-run.sh",
     "android:build": "./scripts/android-build.sh",
-    "version:major": "node ./scripts/git-push-tag major",
-    "version:minor": "node ./scripts/git-push-tag minor",
-    "version:patch": "node ./scripts/git-push-tag patch"
+    "changelog": "auto-changelog --output CHANGELOG.md --template keepachangelog"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.12.1",
@@ -34,7 +32,7 @@
     "react-native-screens": "^2.15.0",
     "react-native-tab-view": "^2.15.2",
     "react-native-vector-icons": "^7.1.0",
-    "react-native-vlc-player": "^0.2.3",
+    "react-native-video": "^5.1.0-alpha8",
     "semver-compare": "^1.0.0",
     "use-async-storage": "^1.2.0"
   },
@@ -47,6 +45,7 @@
     "@types/react-test-renderer": "^16.9.2",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",
+    "auto-changelog": "^2.2.1",
     "babel-jest": "^25.1.0",
     "eslint": "^6.5.1",
     "jest": "^25.1.0",
