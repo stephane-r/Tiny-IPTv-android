@@ -29,6 +29,8 @@ const useAuth = (): UseAuthProps => {
       });
     }
 
+    alert(`${API_URL}/playlist`);
+
     setLoading(true);
 
     try {
