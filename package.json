@@ -3,11 +3,11 @@
   "version": "0.1.7",
   "private": true,
   "scripts": {
-    "postversion": "RNV=android react-native-version && npm run changelog && git push origin develop && git push --tags",
+    "postversion": "RNV=android react-native-version && git push origin develop && git push --tags",
     "start": "react-native start --reset-cache",
     "android": "./scripts/android-run.sh",
     "android:build": "./scripts/android-build.sh",
-    "changelog": "auto-changelog -p --output CHANGELOG.md --template keepachangelog && git add CHANGELOG.md"
+    "changelog": "auto-changelog -p --output CHANGELOG.md --template keepachangelog"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.12.1",
