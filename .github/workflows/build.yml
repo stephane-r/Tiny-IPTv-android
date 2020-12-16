@@ -32,12 +32,3 @@ jobs:
           asset_name: app-${{ env.RELEASE_VERSION }}.apk
           tag: ${{ github.ref }}
           overwrite: true
-      - name: Updating CHANGELOG
-        run: npm run changelog
-      - uses: EndBug/add-and-commit@v5
-        with:
-          add: 'CHANGELOG.md'
-          branch: develop
-          message: 'Update CHANGELOG.md file'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
