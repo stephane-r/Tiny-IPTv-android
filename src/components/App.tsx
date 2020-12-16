@@ -37,11 +37,6 @@ const App = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name={Screen.Player}
-            component={PlayerScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
             name={Screen.Settings}
             component={SettingsScreen}
             options={{ headerShown: true }}
