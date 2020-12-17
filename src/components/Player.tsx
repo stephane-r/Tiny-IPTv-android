@@ -1,14 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Animated, Dimensions, StatusBar, StyleSheet } from 'react-native';
 import Video from 'react-native-video';
 import { useAnimation } from 'react-native-animation-hooks';
 import { useApp } from '../states/app';
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
-
-const INITIAL_PLAYER_DIMENSIONS = {};
-
-const FULL_SCREEN_PLAYER_DIMENSIONS = {};
 
 const Player = () => {
   const [playerStyles, setPlayerStyles] = useState(styles.playerSmall);
