@@ -10,7 +10,6 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import Snackbar from './Snackbar';
 import useUpdateRelease from '../hooks/useUpdateRelease';
 import SettingsScreen from '../screens/Settings';
-import PlayerScreen from '../screens/Player';
 
 const Stack = createStackNavigator();
 
