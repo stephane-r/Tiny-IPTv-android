@@ -16,7 +16,7 @@ const useUpdateRelease = (): UseUpdateReleaseHook => {
 
   useEffect(() => {
     fetchAppRelease().then(({ tagName, browserDownloadUrl }) => {
-      if (semverCompare(tagName, version) === 1) {
+      if (semverCompare(tagName.replace('v', ''), version) === 1) {
         setUrl(browserDownloadUrl);
         setUpdateAvailable(true);
 
