@@ -1,12 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useRef, useState } from 'react';
-import { Animated, Dimensions, StatusBar, StyleSheet } from 'react-native';
+import {
+  Animated,
+  Dimensions,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
 import Video from 'react-native-video';
 import { useAnimation } from 'react-native-animation-hooks';
 import { useApp } from '../states/app';
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
+import { ActivityIndicator } from 'react-native-paper';
 
 const Player = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [playerStyles, setPlayerStyles] = useState(styles.playerSmall);
   const player = useRef();
   const app = useApp();
@@ -46,6 +54,11 @@ const Player = () => {
           bottom: isPipSize ? 50 : 0,
         },
       ]}>
+      {isLoading && (
+        <View style={styles.activityIndicator}>
+          <ActivityIndicator color="white" size="large" />
+        </View>
+      )}
       {app.source ? (
         <TouchableNativeFeedback onPress={togglePlayerStyles}>
           <Video
@@ -58,7 +71,8 @@ const Player = () => {
               uri: app.source,
               type: 'mpeg',
             }}
-            onError={console.log}
+            onLoadStart={() => setIsLoading(true)}
+            onLoad={() => setIsLoading(false)}
           />
         </TouchableNativeFeedback>
       ) : null}
@@ -71,6 +85,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 2,
     backgroundColor: 'black',
+  },
+  activityIndicator: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   playerSmall: {
     width: 480,
