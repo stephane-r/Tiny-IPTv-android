@@ -7,7 +7,7 @@
     "start": "react-native start --reset-cache",
     "android": "./scripts/android-run.sh",
     "android:build": "./scripts/android-build.sh",
-    "changelog": "auto-changelog -p --output CHANGELOG.md --template keepachangelog"
+    "changelog": "auto-changelog -p --output CHANGELOG.md --commit-limit false --template keepachangelog"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.12.1",

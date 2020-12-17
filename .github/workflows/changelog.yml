@@ -22,5 +22,6 @@ jobs:
           add: 'CHANGELOG.md'
           branch: develop
           message: 'Update CHANGELOG.md file'
+          fetch-dep: 0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
