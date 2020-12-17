@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { isTablet } from 'react-native-device-info';
 import { FlatList } from 'react-native-gesture-handler';
 import { useApp } from '../states/app';
@@ -36,12 +36,16 @@ const ChannelGroup: React.FC = ({
         horizontal
         data={item.items}
         renderItem={renderChannel}
-        style={{ paddingLeft: isTablet() ? 0 : 5 }}
+        style={styles.list}
         keyExtractor={({ name }) => name}
       />
       <Spacer height={isTablet() ? 40 : 30} />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  list: { paddingLeft: isTablet() ? 0 : 5 },
+});
 
 export default ChannelGroup;

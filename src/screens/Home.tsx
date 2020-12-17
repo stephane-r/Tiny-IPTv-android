@@ -13,6 +13,7 @@ import TabBar from '../components/TabBar';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Playlist } from '../enums/Playlist';
 import Player from '../components/Player';
+import Menu from '../components/Menu';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -70,6 +71,7 @@ const HomeScreen: React.FC = () => {
       end={{ x: 1, y: 0 }}
       style={styles.container}
       colors={GRADIENT_COLORS}>
+      <Menu />
       {app?.categories ? (
         <Tab.Navigator {...TAB_NAVIGATOR_PROPS()}>
           <Tab.Screen

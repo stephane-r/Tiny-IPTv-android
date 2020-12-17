@@ -8,7 +8,7 @@ import Spacer from '../components/Spacer';
 import { useFavoris } from '../hooks/useFavoris';
 import { useApp } from '../states/app';
 import { useNavigation } from '@react-navigation/native';
-import AppVersion from '../components/AppVersion';
+import { isTablet } from 'react-native-device-info';
 
 const FavorisScreen = () => {
   const { addOrRemoveFromFavoris, clearFavoris } = useFavoris();
@@ -17,37 +17,38 @@ const FavorisScreen = () => {
   const favoris = app.favoris.data;
 
   return (
-    <Layout
-      title="Favoris"
-      rightRender={
-        favoris &&
-        favoris.length > 0 && (
-          <View style={styles.header}>
-            <AppVersion color="white" />
-            <Spacer width={20} />
-            <Button onPress={clearFavoris} color="white" mode="contained">
-              Remove all favoris
-            </Button>
-          </View>
-        )
-      }>
-      <Spacer height={30} />
+    <Layout title="Favoris">
+      <Spacer height={isTablet() ? 30 : 20} />
       {favoris.length === 0 ? (
         <FavorisEmpty title="Favoris is empty" />
       ) : (
         <ScrollView>
-          <View style={styles.list}>
-            {favoris.map((f) => (
-              <View key={f.name}>
-                <Channel
-                  item={f}
-                  isFavoris
-                  addOrRemoveFromFavoris={addOrRemoveFromFavoris}
-                  navigation={navigation}
-                />
-                <Spacer height={30} />
-              </View>
-            ))}
+          <View style={styles.content}>
+            <View style={styles.list}>
+              {favoris.map((f) => (
+                <View key={f.name}>
+                  <Channel
+                    item={f}
+                    isFavoris
+                    addOrRemoveFromFavoris={addOrRemoveFromFavoris}
+                    navigation={navigation}
+                  />
+                  <Spacer height={30} />
+                </View>
+              ))}
+            </View>
+            <Spacer width={15} />
+            <View style={styles.footer}>
+              <Spacer height={30} />
+              <Button
+                onPress={clearFavoris}
+                icon="heart-remove"
+                color="white"
+                mode="contained">
+                Remove all favoris
+              </Button>
+              <Spacer height={30} />
+            </View>
           </View>
         </ScrollView>
       )}
@@ -62,7 +63,10 @@ const FavorisEmpty = ({ title }) => (
 );
 
 const styles = StyleSheet.create({
-  header: { flexDirection: 'row', alignItems: 'center' },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   textVersion: {
     color: 'white',
   },
@@ -73,7 +77,15 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-  list: { flexDirection: 'row', flexWrap: 'wrap' },
+  content: {
+    paddingLeft: isTablet() ? 0 : 5,
+  },
+  list: { width: '100%', flexDirection: 'row', flexWrap: 'wrap' },
+  footer: {
+    width: isTablet() ? 300 : '100%',
+    paddingLeft: isTablet() ? 15 : 10,
+    paddingRight: isTablet() ? 0 : 20,
+  },
 });
 
 export default FavorisScreen;

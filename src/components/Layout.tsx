@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingRight: 60,
+    paddingRight: isTablet() ? 60 : 20,
   },
 });
 

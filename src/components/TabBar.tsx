@@ -8,8 +8,6 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { Screen } from '../enums/Screen';
-import useAuth from '../hooks/useAuth';
 
 const TAB_BAR_WIDTH: number = 60;
 const TAB_ICONS: string[] = [
@@ -23,53 +21,37 @@ const TAB_ICONS: string[] = [
   'sports-football',
 ];
 
-const TabBar = ({ state, navigation }) => {
-  const { logout } = useAuth();
+const TabBar = ({ state, navigation }) => (
+  <View style={styles.list}>
+    {state.routes.map((route, index) => {
+      const isFocused = state.index === index;
 
-  return (
-    <View style={styles.list}>
-      {state.routes.map((route, index) => {
-        const isFocused = state.index === index;
+      const onPress = (): void => {
+        if (!isFocused) {
+          navigation.navigate(route.name);
+        }
+      };
 
-        const onPress = (): void => {
-          if (!isFocused) {
-            navigation.navigate(route.name);
-          }
-        };
-
-        return (
-          <TouchableNativeFeedback key={route.key} onPress={onPress}>
-            <LinearGradient
-              style={styles.item}
-              colors={
-                isFocused
-                  ? ['transparent', '#5a5a5a', 'transparent']
-                  : ['transparent', 'transparent']
-              }>
-              <Icon
-                name={TAB_ICONS[index]}
-                size={25}
-                color={isFocused ? '#b7a742' : '#3b3b3b'}
-              />
-            </LinearGradient>
-          </TouchableNativeFeedback>
-        );
-      })}
-      <TouchableNativeFeedback
-        accessibilityRole="button"
-        onPress={() => navigation.navigate(Screen.Settings)}>
-        <View style={styles.item}>
-          <Icon name="settings" size={25} color="#3b3b3b" />
-        </View>
-      </TouchableNativeFeedback>
-      <TouchableNativeFeedback accessibilityRole="button" onPress={logout}>
-        <View style={styles.item}>
-          <Icon name="logout" size={25} color="#3b3b3b" />
-        </View>
-      </TouchableNativeFeedback>
-    </View>
-  );
-};
+      return (
+        <TouchableNativeFeedback key={route.key} onPress={onPress}>
+          <LinearGradient
+            style={styles.item}
+            colors={
+              isFocused
+                ? ['transparent', '#5a5a5a', 'transparent']
+                : ['transparent', 'transparent']
+            }>
+            <Icon
+              name={TAB_ICONS[index]}
+              size={25}
+              color={isFocused ? '#b7a742' : '#3b3b3b'}
+            />
+          </LinearGradient>
+        </TouchableNativeFeedback>
+      );
+    })}
+  </View>
+);
 
 const styles = StyleSheet.create({
   list: {

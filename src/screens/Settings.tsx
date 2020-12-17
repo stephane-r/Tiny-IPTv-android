@@ -7,6 +7,7 @@ import RNRestart from 'react-native-restart';
 import Spacer from '../components/Spacer';
 import { Playlist } from '../enums/Playlist';
 import { AppState, showSnakbar, useApp } from '../states/app';
+import { isTablet } from 'react-native-device-info';
 
 const SettingsScreen = () => {
   const app: AppState = useApp();
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 10,
-    paddingRight: 30,
+    paddingRight: isTablet() ? 30 : 10,
   },
   content: { flexDirection: 'row', flexWrap: 'wrap', paddingLeft: 15 },
 });
