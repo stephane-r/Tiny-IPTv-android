@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Dimensions, StatusBar, StyleSheet } from 'react-native';
 import Video from 'react-native-video';
@@ -5,20 +6,12 @@ import { useAnimation } from 'react-native-animation-hooks';
 import { useApp } from '../states/app';
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 
-const INITIAL_PLAYER_DIMENSIONS = {
-  width: 480,
-  height: 270,
-};
+const INITIAL_PLAYER_DIMENSIONS = {};
 
-const FULL_SCREEN_PLAYER_DIMENSIONS = {
-  width: Dimensions.get('window').width - 100,
-  height: Dimensions.get('window').height - StatusBar.currentHeight - 100,
-};
+const FULL_SCREEN_PLAYER_DIMENSIONS = {};
 
 const Player = () => {
-  const [playerDimensions, setPlayerDimensions] = useState(
-    INITIAL_PLAYER_DIMENSIONS,
-  );
+  const [playerStyles, setPlayerStyles] = useState(styles.playerSmall);
   const player = useRef();
   const app = useApp();
   const opacity = useAnimation({
@@ -32,12 +25,14 @@ const Player = () => {
     useNativeDriver: true,
   });
 
-  const togglePlayerDimensions = () => {
-    if (playerDimensions.width === INITIAL_PLAYER_DIMENSIONS.width) {
-      return setPlayerDimensions(FULL_SCREEN_PLAYER_DIMENSIONS);
+  const isPipSize = playerStyles.width === styles.playerSmall.width;
+
+  const togglePlayerStyles = () => {
+    if (isPipSize) {
+      return setPlayerStyles(styles.playerFull);
     }
 
-    return setPlayerDimensions(INITIAL_PLAYER_DIMENSIONS);
+    return setPlayerStyles(styles.playerSmall);
   };
 
   return (
@@ -51,16 +46,18 @@ const Player = () => {
             },
           ],
           opacity,
+          right: isPipSize ? 50 : 0,
+          bottom: isPipSize ? 50 : 0,
         },
       ]}>
       {app.source ? (
-        <TouchableNativeFeedback onPress={togglePlayerDimensions}>
+        <TouchableNativeFeedback onPress={togglePlayerStyles}>
           <Video
             ref={player}
-            style={playerDimensions}
+            style={playerStyles}
             paused={false}
             autoplay={true}
-            resizeMode="cover"
+            resizeMode="contain"
             source={{
               uri: app.source,
               type: 'mpeg',
@@ -76,10 +73,16 @@ const Player = () => {
 const styles = StyleSheet.create({
   playerContainer: {
     position: 'absolute',
-    right: 50,
-    bottom: 50,
     zIndex: 2,
-    backgroundColor: 'red',
+    backgroundColor: 'black',
+  },
+  playerSmall: {
+    width: 480,
+    height: 270,
+  },
+  playerFull: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height - StatusBar.currentHeight,
   },
 });
 
