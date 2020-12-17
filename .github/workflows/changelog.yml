@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        fetch-dep: 0
       - uses: actions/setup-node@v1
         with:
           node-version: '14'
@@ -22,6 +23,5 @@ jobs:
           add: 'CHANGELOG.md'
           branch: develop
           message: 'Update CHANGELOG.md file'
-          fetch-dep: 0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
