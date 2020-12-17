@@ -7,8 +7,8 @@ import Layout from '../components/Layout';
 import Spacer from '../components/Spacer';
 import { useFavoris } from '../hooks/useFavoris';
 import { useApp } from '../states/app';
-import { version } from '../../package';
 import { useNavigation } from '@react-navigation/native';
+import AppVersion from '../components/AppVersion';
 
 const FavorisScreen = () => {
   const { addOrRemoveFromFavoris, clearFavoris } = useFavoris();
@@ -23,7 +23,7 @@ const FavorisScreen = () => {
         favoris &&
         favoris.length > 0 && (
           <View style={styles.header}>
-            <Text style={styles.textVersion}>{version}</Text>
+            <AppVersion color="white" />
             <Spacer width={20} />
             <Button onPress={clearFavoris} color="white" mode="contained">
               Remove all favoris

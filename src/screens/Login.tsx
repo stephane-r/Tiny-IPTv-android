@@ -9,6 +9,7 @@ import {
 import { Button, TextInput } from 'react-native-paper';
 import Spacer from '../components/Spacer';
 import Subheading from '../components/Subheading';
+import AppVersion from '../components/AppVersion';
 import useAuth from '../hooks/useAuth';
 import { LoginFormData } from '../types';
 
@@ -59,6 +60,10 @@ const LoginScreen: React.FC = () => {
           {isAccountLoginType && <AcountLogin />}
           {isM3uFileLoginType && <M3uFileLogin />}
           {isPlaylistIdLoginType && <PlaylistIdLogin />}
+        </View>
+        <View style={styles.appVersion}>
+          <AppVersion color="black" />
+          <Spacer height={20} />
         </View>
       </View>
     </ScrollView>
@@ -179,6 +184,10 @@ const styles = StyleSheet.create({
   },
   form: {
     paddingHorizontal: 15,
+  },
+  appVersion: {
+    width: '100%',
+    alignItems: 'center',
   },
 });
 
