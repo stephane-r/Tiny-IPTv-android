@@ -90,10 +90,13 @@ const useAuth = (): UseAuthProps => {
     }
   };
 
-  const logout = (): Promise<void> => {
-    resetState();
-    setPlaylistId(null);
+  const logout = async (): Promise<void> => {
     navigation.navigate(Screen.Login);
+
+    setTimeout(() => {
+      resetState();
+      setPlaylistId(null);
+    }, 500);
   };
 
   return {
