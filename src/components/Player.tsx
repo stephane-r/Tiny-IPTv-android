@@ -15,7 +15,7 @@ import { ActivityIndicator } from 'react-native-paper';
 
 const Player = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [playerStyles, setPlayerStyles] = useState(styles.playerSmall);
+  const [fullscreen, setIsFullscreen] = useState(false);
   const player = useRef();
   const app = useApp();
   const opacity = useAnimation({
@@ -29,15 +29,7 @@ const Player = () => {
     useNativeDriver: true,
   });
 
-  const isPipSize = playerStyles.width === styles.playerSmall.width;
-
-  const togglePlayerStyles = () => {
-    if (isPipSize) {
-      return setPlayerStyles(styles.playerFull);
-    }
-
-    return setPlayerStyles(styles.playerSmall);
-  };
+  const togglePlayerStyles = () => setIsFullscreen(!fullscreen);
 
   return (
     <Animated.View
@@ -50,8 +42,8 @@ const Player = () => {
             },
           ],
           opacity,
-          right: isPipSize ? 50 : 0,
-          bottom: isPipSize ? 50 : 0,
+          right: fullscreen ? 0 : 50,
+          bottom: fullscreen ? 0 : 50,
         },
       ]}>
       {isLoading && (
@@ -63,7 +55,7 @@ const Player = () => {
         <TouchableNativeFeedback onPress={togglePlayerStyles}>
           <Video
             ref={player}
-            style={playerStyles}
+            style={fullscreen ? styles.playerFullscreen : styles.playerPip}
             paused={false}
             autoplay={true}
             resizeMode="contain"
@@ -96,11 +88,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  playerSmall: {
+  playerPip: {
     width: 480,
     height: 270,
   },
-  playerFull: {
+  playerFullscreen: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height - StatusBar.currentHeight,
   },
