@@ -1,28 +1,28 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useRef, useState } from 'react';
-import {
-  Animated,
-  Dimensions,
-  StatusBar,
-  StyleSheet,
-  View,
-} from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated, Dimensions, StyleSheet, View } from 'react-native';
 import Video from 'react-native-video';
 import { useAnimation } from 'react-native-animation-hooks';
 import { useApp } from '../states/app';
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 import { ActivityIndicator } from 'react-native-paper';
+import { isTablet } from 'react-native-device-info';
+import { useDeviceOrientation } from '@react-native-community/hooks';
+
+const getWindowDimension = () => ({
+  width: Dimensions.get('window').width,
+  height: Dimensions.get('window').height,
+});
 
 const Player = () => {
+  const orientation = useDeviceOrientation();
   const [isLoading, setIsLoading] = useState(true);
   const [fullscreen, setIsFullscreen] = useState(false);
+  const [fullscreenDimensions, setFullscreenDimensions] = useState(
+    getWindowDimension(),
+  );
   const player = useRef();
   const app = useApp();
-  const opacity = useAnimation({
-    toValue: app.source ? 1 : 0.5,
-    type: 'spring',
-    useNativeDriver: true,
-  });
   const translateY = useAnimation({
     toValue: app.source ? 0 : 500,
     type: 'spring',
@@ -30,6 +30,10 @@ const Player = () => {
   });
 
   const togglePlayerStyles = () => setIsFullscreen(!fullscreen);
+
+  useEffect(() => {
+    setFullscreenDimensions(getWindowDimension());
+  }, [orientation]);
 
   return (
     <Animated.View
@@ -41,9 +45,8 @@ const Player = () => {
               translateY: translateY,
             },
           ],
-          opacity,
-          right: fullscreen ? 0 : 50,
-          bottom: fullscreen ? 0 : 50,
+          right: fullscreen ? 0 : isTablet() ? 50 : 15,
+          bottom: fullscreen ? 0 : isTablet() ? 50 : 65,
         },
       ]}>
       {isLoading && (
@@ -55,7 +58,13 @@ const Player = () => {
         <TouchableNativeFeedback onPress={togglePlayerStyles}>
           <Video
             ref={player}
-            style={fullscreen ? styles.playerFullscreen : styles.playerPip}
+            style={
+              fullscreen
+                ? fullscreenDimensions
+                : isTablet()
+                ? styles.playerPipMedium
+                : styles.playerPipSmall
+            }
             paused={false}
             autoplay={true}
             resizeMode="contain"
@@ -64,6 +73,7 @@ const Player = () => {
               type: 'mpeg',
             }}
             onLoadStart={() => setIsLoading(true)}
+            onError={(error) => alert(JSON.stringify(error))}
             onLoad={() => setIsLoading(false)}
           />
         </TouchableNativeFeedback>
@@ -88,13 +98,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  playerPip: {
+  playerPipSmall: {
+    width: 300,
+    height: 170,
+  },
+  playerPipMedium: {
     width: 480,
     height: 270,
-  },
-  playerFullscreen: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height - StatusBar.currentHeight,
   },
 });
 
