@@ -1,3 +1,5 @@
+import { isTablet } from 'react-native-device-info';
+
 type Icons = 'favorite' | 'ondemand-video' | 'sports-football';
 
 const getQualityIcon = (quality: string): Icons => {
@@ -5,37 +7,37 @@ const getQualityIcon = (quality: string): Icons => {
     case quality.includes('SD'):
       return {
         name: 'sd',
-        size: 32,
+        size: setIconSize(32, 26),
       };
     case quality.includes('4K'):
       return {
         name: '4k',
-        size: 32,
+        size: setIconSize(32, 26),
       };
     case quality.includes('HD'):
       return {
         name: 'hd',
-        size: 32,
+        size: setIconSize(32, 26),
       };
     case quality.includes('HEVC'):
       return {
         name: 'hdr-on',
-        size: 35,
+        size: setIconSize(35, 28),
       };
     case quality.includes('BACK UP'):
       return {
         name: 'save',
-        size: 28,
+        size: setIconSize(28, 25),
       };
     case quality.includes('CINEMA'):
       return {
         name: 'ondemand-video',
-        size: 28,
+        size: setIconSize(28, 25),
       };
     case quality.includes('Sports'):
       return {
         name: 'sports-soccer',
-        size: 30,
+        size: setIconSize(30, 25),
       };
     default:
       return {
@@ -44,5 +46,8 @@ const getQualityIcon = (quality: string): Icons => {
       };
   }
 };
+
+const setIconSize = (tabletSize: number, mobileSize: number): number =>
+  isTablet() ? tabletSize : mobileSize;
 
 export default getQualityIcon;

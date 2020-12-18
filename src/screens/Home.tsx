@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { Playlist } from '../enums/Playlist';
 import Player from '../components/Player';
 import Menu from '../components/Menu';
+import getQualityIcon from '../utils/getQualityIcon';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -87,7 +88,7 @@ const HomeScreen: React.FC = () => {
               name={c}
               component={TabScreen}
               options={{
-                tabBarIcon: () => <Icon name="api" size={25} color="#000" />,
+                tabBarIcon: () => <Icon {...getQualityIcon(c)} color="#000" />,
               }}
               initialParams={{
                 categoryName: c,
