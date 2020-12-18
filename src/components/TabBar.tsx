@@ -8,18 +8,9 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import getQualityIcon from '../utils/getQualityIcon';
 
 const TAB_BAR_WIDTH: number = 60;
-const TAB_ICONS: string[] = [
-  'favorite',
-  'ondemand-video',
-  'ondemand-video',
-  'ondemand-video',
-  'ondemand-video',
-  'ondemand-video',
-  'ondemand-video',
-  'sports-football',
-];
 
 const TabBar = ({ state, navigation }) => (
   <View style={styles.list}>
@@ -42,8 +33,7 @@ const TabBar = ({ state, navigation }) => (
                 : ['transparent', 'transparent']
             }>
             <Icon
-              name={TAB_ICONS[index]}
-              size={25}
+              {...getQualityIcon(route.name)}
               color={isFocused ? '#b7a742' : '#3b3b3b'}
             />
           </LinearGradient>
@@ -72,4 +62,4 @@ const styles = StyleSheet.create({
 });
 
 export default TabBar;
-export { TAB_BAR_WIDTH, TAB_ICONS };
+export { TAB_BAR_WIDTH };
