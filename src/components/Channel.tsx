@@ -17,12 +17,10 @@ const Channel: React.FC = ({
   item,
   isFavoris,
   addOrRemoveFromFavoris,
-  navigation,
 }: {
   item: ChannelType;
   favoris: string[];
   addOrRemoveFromFavoris: (channel: ChannelType) => void;
-  navigation: () => void;
 }) => (
   <>
     {Platform.isTV && isFavoris ? (
