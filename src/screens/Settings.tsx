@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
-import { Checkbox, Divider, Text, Subheading } from 'react-native-paper';
+import { Switch, Divider, Text, Subheading, Appbar } from 'react-native-paper';
 import { useAsyncStorage } from 'use-async-storage';
 import RNRestart from 'react-native-restart';
 import Spacer from '../components/Spacer';
@@ -9,7 +9,8 @@ import { Playlist } from '../enums/Playlist';
 import { AppState, showSnakbar, useApp } from '../states/app';
 import { isTablet } from 'react-native-device-info';
 
-const SettingsScreen = () => {
+const SettingsScreen = ({ navigation }) => {
+  const [needToReload, setNeedToReload] = useState(false);
   const app: AppState = useApp();
   const [playlistId] = useAsyncStorage<string | null>(Playlist.id, null);
   const [fileUrl] = useAsyncStorage<string | null>('fileUrl', '');
@@ -27,17 +28,22 @@ const SettingsScreen = () => {
     }
 
     setHiddenCategories(hiddenCategoriesUpdated);
+    setNeedToReload(true);
     showSnakbar({
-      message: 'You need to reload app',
-      action: {
-        label: 'Reload',
-        onPress: () => RNRestart.Restart(),
-      },
+      message:
+        'Settings updated, you need to reload app by press reload icon on the top right corner',
     });
   };
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Settings" />
+        {needToReload && (
+          <Appbar.Action icon="reload" onPress={() => RNRestart.Restart()} />
+        )}
+      </Appbar.Header>
       <Spacer height={20} />
       <Subheading style={styles.subheading}>Your playlist id</Subheading>
       <Spacer height={10} />
@@ -77,10 +83,8 @@ const SettingsScreen = () => {
             key={c}
             onPress={() => toggleHiddenCategories(c)}>
             <View style={styles.category}>
-              <Checkbox
-                status={hiddenCategories?.includes(c) ? 'checked' : 'unchecked'}
-              />
               <Text>{c}</Text>
+              <Switch value={Boolean(hiddenCategories?.includes(c))} />
             </View>
           </TouchableNativeFeedback>
         ))}
@@ -95,12 +99,17 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     paddingLeft: 15,
   },
-  categories: { flexDirection: 'row', flexWrap: 'wrap' },
+  categories: {
+    flexDirection: isTablet() ? 'row' : 'column',
+    flexWrap: isTablet() ? 'wrap' : 'nowrap',
+    flex: 1,
+  },
   category: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 10,
-    paddingRight: isTablet() ? 30 : 10,
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+    paddingBottom: 15,
   },
   content: { flexDirection: 'row', flexWrap: 'wrap', paddingLeft: 15 },
 });

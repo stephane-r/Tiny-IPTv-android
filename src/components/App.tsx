@@ -19,27 +19,13 @@ const App = () => {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={Screen.Loading}>
-          <Stack.Screen
-            name={Screen.Loading}
-            component={LoadingScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={Screen.Login}
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={Screen.Home}
-            component={HomeScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={Screen.Settings}
-            component={SettingsScreen}
-            options={{ headerShown: true }}
-          />
+        <Stack.Navigator
+          screenOptions={{ headerShown: false }}
+          initialRouteName={Screen.Loading}>
+          <Stack.Screen name={Screen.Loading} component={LoadingScreen} />
+          <Stack.Screen name={Screen.Login} component={LoginScreen} />
+          <Stack.Screen name={Screen.Home} component={HomeScreen} />
+          <Stack.Screen name={Screen.Settings} component={SettingsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
       <Snackbar />
