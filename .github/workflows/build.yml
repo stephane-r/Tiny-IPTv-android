@@ -18,9 +18,7 @@ jobs:
       - name: Create .env file
         run: echo "API_URL=${{ secrets.API_URL }}" >> .env
       - name: Use expo-player
-        run: /
-          rm android/settings.gradle
-          cp android/settings.gradle.production android/settings.gradle
+        run: rm android/settings.gradle && cp android/settings.gradle.production android/settings.gradle
       - name: Build Android Release
         run: |
           echo "${{ secrets.APP_KEYSTORE }}" > app.keystore.asc
