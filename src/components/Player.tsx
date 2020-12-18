@@ -1,6 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Dimensions, StyleSheet, View } from 'react-native';
+import {
+  Animated,
+  Dimensions,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
 import Video from 'react-native-video';
 import { useAnimation } from 'react-native-animation-hooks';
 import { useApp } from '../states/app';
@@ -11,7 +17,9 @@ import { useDeviceOrientation } from '@react-native-community/hooks';
 
 const getWindowDimension = () => ({
   width: Dimensions.get('window').width,
-  height: Dimensions.get('window').height,
+  height:
+    Dimensions.get('window').height -
+    (isTablet() ? StatusBar.currentHeight : 0),
 });
 
 const Player = () => {
@@ -70,7 +78,6 @@ const Player = () => {
             resizeMode="contain"
             source={{
               uri: app.source,
-              type: 'mpeg',
             }}
             onLoadStart={() => setIsLoading(true)}
             onError={(error) => alert(JSON.stringify(error))}
