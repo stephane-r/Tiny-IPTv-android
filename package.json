@@ -23,6 +23,7 @@
     "react-native-animation-hooks": "^1.0.1",
     "react-native-device-info": "^7.2.1",
     "react-native-dotenv": "^2.4.2",
+    "react-native-fast-image": "^8.3.4",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.9.0",
     "react-native-linear-gradient": "^2.5.6",
