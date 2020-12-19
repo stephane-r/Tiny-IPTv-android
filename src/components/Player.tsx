@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, { memo, useEffect } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import VLCPlayer from 'react-native-vlc-player';
 import { useAnimation } from 'react-native-animation-hooks';
@@ -11,12 +11,12 @@ import { useNavigation } from '@react-navigation/native';
 
 const Player = () => {
   const app: AppState = useApp();
+  const navigation = useNavigation();
   const translateY = useAnimation({
     toValue: app.source.visible ? 0 : 500,
     type: 'spring',
     useNativeDriver: true,
   });
-  const navigation = useNavigation();
 
   const togglePlayerStyles = () => {
     setSource({ uri: app.source.uri, visible: false });
@@ -25,6 +25,8 @@ const Player = () => {
       400,
     );
   };
+
+  useEffect(() => {}, []);
 
   return (
     <Animated.View
@@ -40,7 +42,7 @@ const Player = () => {
           bottom: isTablet() ? 50 : 65,
         },
       ]}>
-      {app.source.uri ? (
+      {app.source.visible ? (
         <>
           <View
             style={{
@@ -100,4 +102,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Player;
+export default memo(Player);
