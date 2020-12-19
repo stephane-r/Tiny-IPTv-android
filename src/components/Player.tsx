@@ -1,47 +1,30 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  Animated,
-  Dimensions,
-  StatusBar,
-  StyleSheet,
-  View,
-} from 'react-native';
-import Video from 'react-native-video';
+import React from 'react';
+import { Animated, StyleSheet, View } from 'react-native';
+import VLCPlayer from 'react-native-vlc-player';
 import { useAnimation } from 'react-native-animation-hooks';
-import { useApp } from '../states/app';
+import { AppState, setSource, useApp } from '../states/app';
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
-import { ActivityIndicator } from 'react-native-paper';
 import { isTablet } from 'react-native-device-info';
-import { useDeviceOrientation } from '@react-native-community/hooks';
-
-const getWindowDimension = () => ({
-  width: Dimensions.get('window').width,
-  height:
-    Dimensions.get('window').height -
-    (isTablet() ? StatusBar.currentHeight : 0),
-});
+import { Screen } from '../enums/Screen';
+import { useNavigation } from '@react-navigation/native';
 
 const Player = () => {
-  const orientation = useDeviceOrientation();
-  const [isLoading, setIsLoading] = useState(true);
-  const [fullscreen, setIsFullscreen] = useState(false);
-  const [fullscreenDimensions, setFullscreenDimensions] = useState(
-    getWindowDimension(),
-  );
-  const player = useRef();
-  const app = useApp();
+  const app: AppState = useApp();
   const translateY = useAnimation({
-    toValue: app.source ? 0 : 500,
+    toValue: app.source.visible ? 0 : 500,
     type: 'spring',
     useNativeDriver: true,
   });
+  const navigation = useNavigation();
 
-  const togglePlayerStyles = () => setIsFullscreen(!fullscreen);
-
-  useEffect(() => {
-    setFullscreenDimensions(getWindowDimension());
-  }, [orientation]);
+  const togglePlayerStyles = () => {
+    setSource({ uri: app.source.uri, visible: false });
+    setTimeout(
+      () => navigation.navigate(Screen.Player, { source: app.source.uri }),
+      400,
+    );
+  };
 
   return (
     <Animated.View
@@ -53,37 +36,39 @@ const Player = () => {
               translateY: translateY,
             },
           ],
-          right: fullscreen ? 0 : isTablet() ? 50 : 15,
-          bottom: fullscreen ? 0 : isTablet() ? 50 : 65,
+          right: isTablet() ? 50 : 15,
+          bottom: isTablet() ? 50 : 65,
         },
       ]}>
-      {isLoading && (
-        <View style={styles.activityIndicator}>
-          <ActivityIndicator color="white" size="large" />
-        </View>
-      )}
-      {app.source ? (
-        <TouchableNativeFeedback onPress={togglePlayerStyles}>
-          <Video
-            ref={player}
-            style={
-              fullscreen
-                ? fullscreenDimensions
-                : isTablet()
-                ? styles.playerPipMedium
-                : styles.playerPipSmall
-            }
+      {app.source.uri ? (
+        <>
+          <View
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              left: 0,
+              bottom: 0,
+              zIndex: 2,
+            }}>
+            <TouchableNativeFeedback
+              style={
+                isTablet() ? styles.playerPipMedium : styles.playerPipSmall
+              }
+              onPress={togglePlayerStyles}
+            />
+          </View>
+          <VLCPlayer
+            style={isTablet() ? styles.playerPipMedium : styles.playerPipSmall}
             paused={false}
             autoplay={true}
-            resizeMode="contain"
             source={{
-              uri: app.source,
+              uri: app.source.uri,
+              autoplay: true,
+              initOptions: ['--codec=avcodec'],
             }}
-            onLoadStart={() => setIsLoading(true)}
-            onError={(error) => alert(JSON.stringify(error))}
-            onLoad={() => setIsLoading(false)}
           />
-        </TouchableNativeFeedback>
+        </>
       ) : null}
     </Animated.View>
   );

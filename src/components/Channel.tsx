@@ -32,7 +32,12 @@ const Channel: React.FC = ({
       />
     )}
     <TouchableNativeFeedback
-      onPress={() => setSource(item.url)}
+      onPress={() =>
+        setSource({
+          uri: item.url,
+          visible: true,
+        })
+      }
       onLongPress={() => addOrRemoveFromFavoris(item)}>
       <View style={styles.container}>
         <ImageBackground
