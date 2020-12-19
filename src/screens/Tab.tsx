@@ -1,11 +1,12 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { memo } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList } from 'react-native';
 import { Channel as ChannelType } from '../types';
 import ChannelGroup from '../components/ChannelGroup';
 import Layout from '../components/Layout';
 import { isTablet } from 'react-native-device-info';
 import { useFavoris } from '../hooks/useFavoris';
+import Spacer from '../components/Spacer';
 
 const TabScreen: React.FC = () => {
   const { params } = useRoute();
@@ -23,7 +24,7 @@ const TabScreen: React.FC = () => {
 
   return (
     <Layout title={params.categoryName}>
-      <View style={{ height: isTablet() ? 30 : 20 }} />
+      <Spacer height={isTablet() ? 30 : 20} />
       <FlatList
         data={params.data}
         renderItem={renderChannel}
