@@ -1,6 +1,6 @@
 {
   "name": "tiny-iptv",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "private": true,
   "scripts": {
     "postversion": "RNV=android react-native-version && git push origin develop && git push --tags",
