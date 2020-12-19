@@ -24,7 +24,9 @@ const PlayerScreen = () => {
 
     Dimensions.addEventListener('change', (event) => {
       const { window } = event;
-      setIsLandscape(window.width > window.height);
+      if (isFocused) {
+        setIsLandscape(window.width > window.height);
+      }
     });
 
     return () =>
