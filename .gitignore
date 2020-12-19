@@ -4,7 +4,6 @@ build/
 .idea
 .gradle
 local.properties
-sentry.properties
 *.iml
 
 # Visual Studio Code
