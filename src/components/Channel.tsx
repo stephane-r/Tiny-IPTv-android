@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
 import {
-  ImageBackground,
   Platform,
   StyleSheet,
   TouchableNativeFeedback,
@@ -11,6 +10,7 @@ import { Text } from 'react-native-paper';
 import { setSource } from '../states/app';
 import { Channel as ChannelType } from '../types';
 import { IconFavoris, IconFavorisButton } from './IconFavoris';
+import FastImage from 'react-native-fast-image';
 
 const IMAGE_PLACEHOLDER =
   'https://www.semencesdefrance.com/wp-content/uploads/2020/01/placeholder.png';
@@ -42,11 +42,19 @@ const Channel: React.FC = ({
       }
       onLongPress={() => addOrRemoveFromFavoris(item)}>
       <View style={styles.container}>
-        <ImageBackground
+        {/* <ImageBackground
           source={{
             uri: item.tvg.logo ? item.tvg.logo : IMAGE_PLACEHOLDER,
           }}
           style={styles.imageBackground}
+        /> */}
+        <FastImage
+          style={styles.imageBackground}
+          source={{
+            uri: item.tvg.logo ? item.tvg.logo : IMAGE_PLACEHOLDER,
+            priority: FastImage.priority.normal,
+          }}
+          resizeMode={FastImage.resizeMode.contain}
         />
         <Text style={styles.name}>{item.name}</Text>
       </View>
