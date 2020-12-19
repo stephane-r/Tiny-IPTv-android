@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { useAnimation } from 'react-native-animation-hooks';
 import { AppState, setSource, useApp } from '../states/app';
-import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 import { isTablet } from 'react-native-device-info';
 import { Screen } from '../enums/Screen';
 import { useNavigation } from '@react-navigation/core';
