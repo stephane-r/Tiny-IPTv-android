@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler';
+import * as Sentry from '@sentry/react-native';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -11,6 +12,11 @@ import Snackbar from './Snackbar';
 import useUpdateRelease from '../hooks/useUpdateRelease';
 import SettingsScreen from '../screens/Settings';
 import PlayerScreen from '../screens/Player';
+import { SENTRY_API_KEY } from '@env';
+
+Sentry.init({
+  dsn: SENTRY_API_KEY,
+});
 
 const Stack = createStackNavigator();
 

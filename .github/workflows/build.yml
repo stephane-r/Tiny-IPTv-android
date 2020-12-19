@@ -17,6 +17,8 @@ jobs:
         run: npm install
       - name: Create .env file
         run: echo "API_URL=${{ secrets.API_URL }}" >> .env
+      - name: Config Sentry key's
+        run: echo "SENTRY_API_KEY=${{ secrets.SENTRY_API_KEY }}" >> .env && sed s/SENTRY_AUTH_TOKEN/${{ secrets.SENTRY_AUTH_TOKEN }}/g sentry.properties.dist > sentry.properties
       - name: Build Android Release
         run: |
           echo "${{ secrets.APP_KEYSTORE }}" > app.keystore.asc
