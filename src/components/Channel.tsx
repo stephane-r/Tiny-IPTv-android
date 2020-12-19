@@ -4,9 +4,9 @@ import {
   StyleSheet,
   TouchableNativeFeedback,
   View,
+  Text,
 } from 'react-native';
 import { isTablet } from 'react-native-device-info';
-import { Text } from 'react-native-paper';
 import { setSource } from '../states/app';
 import { Channel as ChannelType } from '../types';
 import { IconFavoris, IconFavorisButton } from './IconFavoris';
@@ -19,10 +19,12 @@ const Channel: React.FC = ({
   item,
   isFavoris,
   addOrRemoveFromFavoris,
+  categoryName,
 }: {
   item: ChannelType;
   favoris: string[];
   addOrRemoveFromFavoris: (channel: ChannelType) => void;
+  categoryName: string;
 }) => (
   <>
     {Platform.isTV && isFavoris ? (
@@ -42,12 +44,6 @@ const Channel: React.FC = ({
       }
       onLongPress={() => addOrRemoveFromFavoris(item)}>
       <View style={styles.container}>
-        {/* <ImageBackground
-          source={{
-            uri: item.tvg.logo ? item.tvg.logo : IMAGE_PLACEHOLDER,
-          }}
-          style={styles.imageBackground}
-        /> */}
         <FastImage
           style={styles.imageBackground}
           source={{
@@ -56,7 +52,7 @@ const Channel: React.FC = ({
           }}
           resizeMode={FastImage.resizeMode.contain}
         />
-        <Text style={styles.name}>{item.name}</Text>
+        <Text style={styles.name}>{item.name.replace(categoryName, '')}</Text>
       </View>
     </TouchableNativeFeedback>
   </>

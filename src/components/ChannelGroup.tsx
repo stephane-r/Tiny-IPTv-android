@@ -11,9 +11,11 @@ import Subheading from './Subheading';
 const ChannelGroup: React.FC = ({
   item,
   addOrRemoveFromFavoris,
-  navigation,
+  categoryName,
 }: {
   item: ChannelType;
+  addOrRemoveFromFavoris: (channel: ChannelType) => void;
+  categoryName: string;
 }) => {
   const app = useApp();
 
@@ -22,7 +24,7 @@ const ChannelGroup: React.FC = ({
       item={props.item}
       isFavoris={app.favoris.ids.includes(props.item.name)}
       addOrRemoveFromFavoris={addOrRemoveFromFavoris}
-      navigation={navigation}
+      categoryName={categoryName}
     />
   );
 

@@ -17,6 +17,7 @@ const TabScreen: React.FC = () => {
       item={item}
       addOrRemoveFromFavoris={addOrRemoveFromFavoris}
       navigation={navigation}
+      categoryName={params.categoryName}
     />
   );
 
