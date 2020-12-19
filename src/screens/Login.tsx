@@ -12,6 +12,7 @@ import Subheading from '../components/Subheading';
 import AppVersion from '../components/AppVersion';
 import useAuth from '../hooks/useAuth';
 import { LoginFormData } from '../types';
+import { DEV_PLAYLIST_ID } from '@env';
 
 type ACCOUNT_TYPE = 'account';
 type M3U_FILE_TYPE = 'm3u-file';
@@ -141,7 +142,9 @@ const M3uFileLogin = () => {
 };
 
 const PlaylistIdLogin = () => {
-  const [playlistId, setPlaylistId] = useState(null);
+  const [playlistId, setPlaylistId] = useState(
+    process.env.NODE_ENV !== 'production' ? DEV_PLAYLIST_ID : null,
+  );
   const { loginWithPlaylistId, loading } = useAuth();
 
   const onPress = (): void => loginWithPlaylistId(playlistId);
@@ -155,6 +158,7 @@ const PlaylistIdLogin = () => {
         <TextInput
           mode="outlined"
           label="Playlist ID"
+          value={playlistId}
           onChangeText={setPlaylistId}
         />
         <Spacer height={15} />
