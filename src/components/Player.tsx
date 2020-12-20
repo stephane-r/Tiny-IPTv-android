@@ -1,22 +1,36 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { memo, useEffect, useRef } from 'react';
-import VLCPlayer from 'react-native-vlc-player';
+import React, { memo, useEffect, useRef, useState } from 'react';
+import { VLCPlayer } from '@imokhles/react-native-vlc';
 import {
   Animated,
+  Dimensions,
   PanResponder,
-  Pressable,
+  TouchableNativeFeedback,
+  StatusBar,
   StyleSheet,
   View,
 } from 'react-native';
 import { useAnimation } from 'react-native-animation-hooks';
-import { AppState, setSource, useApp } from '../states/app';
+import { AppState, useApp } from '../states/app';
 import { isTablet } from 'react-native-device-info';
-import { Screen } from '../enums/Screen';
-import { useNavigation } from '@react-navigation/core';
+import { ActivityIndicator } from 'react-native-paper';
+import { useDeviceOrientation } from '@react-native-community/hooks';
+
+const getWindowDimension = () => ({
+  width: Dimensions.get('window').width,
+  height:
+    Dimensions.get('window').height -
+    (isTablet() ? StatusBar.currentHeight : 0),
+});
 
 const Player = () => {
+  const orientation = useDeviceOrientation();
+  const [isLoading, setIsLoading] = useState(true);
+  const [fullscreen, setIsFullscreen] = useState(false);
+  const [fullscreenDimensions, setFullscreenDimensions] = useState(
+    getWindowDimension(),
+  );
   const app: AppState = useApp();
-  const navigation = useNavigation();
   const opacity = useAnimation({
     toValue: app.source.visible ? 1 : 0,
     type: 'spring',
@@ -31,11 +45,19 @@ const Player = () => {
   });
 
   const togglePlayerStyles = () => {
-    setSource({ uri: app.source.uri, visible: false });
-    navigation.navigate(Screen.Player, { source: app.source.uri });
+    if (!fullscreen) {
+      pan.setValue({
+        x: 0,
+        y: 0,
+      });
+    }
+
+    return setIsFullscreen(!fullscreen);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setFullscreenDimensions(getWindowDimension());
+  }, [orientation]);
 
   const pan = useRef(new Animated.ValueXY()).current;
   const panResponder = PanResponder.create({
@@ -51,57 +73,46 @@ const Player = () => {
     onPanResponderRelease: () => pan.flattenOffset(),
   });
 
+  const playerDimensions = fullscreen
+    ? fullscreenDimensions
+    : isTablet()
+    ? styles.playerPipMedium
+    : styles.playerPipSmall;
+
   return (
-    <View>
-      <Animated.View
-        style={[
-          styles.playerContainer,
-          {
-            opacity,
-            transform: [
-              { translateX: pan.x },
-              { translateY: pan.y },
-              { scale },
-            ],
-            right: isTablet() ? 50 : 15,
-            bottom: isTablet() ? 50 : 65,
-          },
-        ]}
-        {...panResponder.panHandlers}>
-        {app.source.uri ? (
-          <>
-            <View
-              style={{
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                left: 0,
-                bottom: 0,
-                zIndex: 2,
-              }}>
-              <Pressable
-                style={
-                  isTablet() ? styles.playerPipMedium : styles.playerPipSmall
-                }
-                onPress={togglePlayerStyles}
-              />
-            </View>
-            <VLCPlayer
-              style={
-                isTablet() ? styles.playerPipMedium : styles.playerPipSmall
-              }
-              paused={false}
-              autoplay={true}
-              source={{
-                uri: app.source.uri,
-                autoplay: true,
-                initOptions: ['--codec=avcodec'],
-              }}
-            />
-          </>
-        ) : null}
-      </Animated.View>
-    </View>
+    <Animated.View
+      style={[
+        styles.playerContainer,
+        playerDimensions,
+        {
+          opacity,
+          transform: [{ translateX: pan.x }, { translateY: pan.y }, { scale }],
+          backgroundColor: 'black',
+          right: fullscreen ? 0 : isTablet() ? 50 : 15,
+          bottom: fullscreen ? 0 : isTablet() ? 50 : 65,
+        },
+      ]}
+      {...panResponder.panHandlers}>
+      {isLoading && (
+        <View style={styles.activityIndicator}>
+          <ActivityIndicator color="white" size="large" />
+        </View>
+      )}
+      {app.source.uri ? (
+        <TouchableNativeFeedback onPress={togglePlayerStyles}>
+          <VLCPlayer
+            style={playerDimensions}
+            source={{
+              uri: app.source.uri,
+            }}
+            onPlaying={() => setIsLoading(false)}
+            onStopped={() => setIsLoading(true)}
+            onBuffering={() => setIsLoading(true)}
+            onProgress={() => setIsLoading(false)}
+          />
+        </TouchableNativeFeedback>
+      ) : null}
+    </Animated.View>
   );
 };
 

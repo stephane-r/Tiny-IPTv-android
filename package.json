@@ -10,6 +10,7 @@
     "changelog": "auto-changelog -p --output CHANGELOG.md --commit-limit false --template keepachangelog"
   },
   "dependencies": {
+    "@imokhles/react-native-vlc": "^1.0.5",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/hooks": "^2.6.0",
     "@react-native-community/masked-view": "^0.1.10",
@@ -34,7 +35,6 @@
     "react-native-screens": "^2.15.0",
     "react-native-tab-view": "^2.15.2",
     "react-native-vector-icons": "^7.1.0",
-    "react-native-vlc-player": "^0.2.3",
     "semver-compare": "^1.0.0",
     "use-async-storage": "^1.2.0"
   },
