@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { isTablet } from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -30,12 +30,13 @@ const TAB_NAVIGATOR_PROPS = () => {
       </View>
     ),
     removeClippedSubviews: true,
-    tabBarPosition: 'bottom',
   };
 
-  if (isTablet()) {
+  if (isTablet() || Platform.isTV) {
     props.tabBar = (tabBarProps) => <TabBar {...tabBarProps} />;
+    props.tabBarPosition = 'top';
   } else {
+    props.tabBarPosition = 'bottom';
     props.tabBarOptions = {
       scrollEnabled: true,
       tabStyle: {

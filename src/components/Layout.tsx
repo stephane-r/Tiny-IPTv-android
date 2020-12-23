@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { isTablet } from 'react-native-device-info';
+import { isMobile } from '../constants';
 import Spacer from './Spacer';
 import { TAB_BAR_WIDTH } from './TabBar';
 import Title from './Title';
@@ -19,13 +19,13 @@ const Layout: React.FC = ({ title, rightRender, children }) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingLeft: isTablet() ? TAB_BAR_WIDTH * 1.8 : 0,
+    paddingLeft: isMobile ? 0 : TAB_BAR_WIDTH * 1.8,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingRight: isTablet() ? 60 : 20,
+    paddingRight: isMobile ? 20 : 60,
   },
 });
 

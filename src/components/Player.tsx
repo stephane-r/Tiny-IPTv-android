@@ -9,6 +9,8 @@ import {
   StatusBar,
   StyleSheet,
   View,
+  Platform,
+  BackHandler,
 } from 'react-native';
 import { useAnimation } from 'react-native-animation-hooks';
 import { AppState, useApp } from '../states/app';
@@ -26,7 +28,7 @@ const getWindowDimension = () => ({
 const Player = () => {
   const orientation = useDeviceOrientation();
   const [isLoading, setIsLoading] = useState(true);
-  const [fullscreen, setIsFullscreen] = useState(false);
+  const [fullscreen, setIsFullscreen] = useState(Platform.isTV);
   const [fullscreenDimensions, setFullscreenDimensions] = useState(
     getWindowDimension(),
   );
@@ -57,7 +59,17 @@ const Player = () => {
 
   useEffect(() => {
     setFullscreenDimensions(getWindowDimension());
-  }, [orientation]);
+
+    if (Platform.isTV) {
+      BackHandler.addEventListener('hardwareBackPress', () => {
+        if (fullscreen) {
+          setIsFullscreen(false);
+        }
+
+        return false;
+      });
+    }
+  }, [orientation, fullscreen]);
 
   const pan = useRef(new Animated.ValueXY()).current;
   const panResponder = PanResponder.create({

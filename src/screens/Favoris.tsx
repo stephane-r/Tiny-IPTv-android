@@ -9,6 +9,8 @@ import { useFavoris } from '../hooks/useFavoris';
 import { useApp } from '../states/app';
 import { useNavigation } from '@react-navigation/native';
 import { isTablet } from 'react-native-device-info';
+import { isMobile } from '../constants';
+import Subheading from '../components/Subheading';
 
 const FavorisScreen = () => {
   const { addOrRemoveFromFavoris, clearFavoris } = useFavoris();
@@ -18,12 +20,13 @@ const FavorisScreen = () => {
 
   return (
     <Layout title="Favoris">
-      <Spacer height={isTablet() ? 30 : 20} />
+      <Spacer height={isTablet() ? 30 : 10} />
       {favoris.length === 0 ? (
         <FavorisEmpty title="Favoris is empty" />
       ) : (
         <ScrollView>
           <View style={styles.content}>
+            <Subheading>All</Subheading>
             <View style={styles.list}>
               {favoris.map((f) => (
                 <View key={f.name}>
@@ -39,7 +42,7 @@ const FavorisScreen = () => {
             </View>
             <Spacer width={15} />
             <View style={styles.footer}>
-              <Spacer height={30} />
+              <Spacer height={20} />
               <Button
                 onPress={clearFavoris}
                 icon="heart-remove"
@@ -80,11 +83,16 @@ const styles = StyleSheet.create({
   content: {
     paddingLeft: isTablet() ? 0 : 5,
   },
-  list: { width: '100%', flexDirection: 'row', flexWrap: 'wrap' },
+  list: {
+    width: '100%',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingVertical: 10,
+  },
   footer: {
-    width: isTablet() ? 300 : '100%',
-    paddingLeft: isTablet() ? 15 : 10,
-    paddingRight: isTablet() ? 0 : 20,
+    width: isMobile ? '100%' : 300,
+    paddingLeft: isMobile ? 10 : 15,
+    paddingRight: isMobile ? 20 : 0,
   },
 });
 

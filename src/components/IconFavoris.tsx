@@ -1,10 +1,19 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import { StyleSheet, TouchableNativeFeedback, View } from 'react-native';
+import { isTablet } from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const IconFavoris: React.FC = () => (
-  <View style={[styles.iconAbsolute, styles.icon]}>
-    <Icon name="favorite" size={18} color="white" />
+const IconFavoris: React.FC = ({ isActive }) => (
+  <View
+    style={[
+      styles.iconTvAbsolute,
+      styles.icon,
+      {
+        backgroundColor: isActive ? '#b7a742' : 'white',
+      },
+    ]}>
+    <Icon name="favorite" size={18} color={isActive ? 'white' : '#b7a742'} />
   </View>
 );
 
@@ -31,8 +40,14 @@ const IconFavorisButton: React.FC = ({ onPress, isActive }) => (
 const styles = StyleSheet.create({
   iconAbsolute: {
     position: 'absolute',
-    top: 0,
-    right: 15,
+    top: isTablet() ? 0 : -2,
+    right: isTablet() ? 15 : 8,
+    zIndex: 2,
+  },
+  iconTvAbsolute: {
+    position: 'absolute',
+    top: 10,
+    right: 20,
     zIndex: 2,
   },
   icon: {

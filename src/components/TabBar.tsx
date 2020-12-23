@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Dimensions,
   StatusBar,
@@ -24,24 +24,40 @@ const TabBar = ({ state, navigation }) => (
       };
 
       return (
-        <TouchableNativeFeedback key={route.key} onPress={onPress}>
-          <LinearGradient
-            style={styles.item}
-            colors={
-              isFocused
-                ? ['transparent', '#5a5a5a', 'transparent']
-                : ['transparent', 'transparent']
-            }>
-            <Icon
-              {...getQualityIcon(route.name)}
-              color={isFocused ? '#b7a742' : '#3b3b3b'}
-            />
-          </LinearGradient>
-        </TouchableNativeFeedback>
+        <Item
+          key={route.key}
+          isFocused={isFocused}
+          onPress={onPress}
+          iconProps={getQualityIcon(route.name)}
+        />
       );
     })}
   </View>
 );
+
+const Item = ({ onPress, isFocused, iconProps }) => {
+  const [isFocus, setIsFocus] = useState(isFocused);
+
+  return (
+    <TouchableNativeFeedback
+      onFocus={() => setIsFocus(true)}
+      onBlur={() => setIsFocus(false)}
+      onPress={onPress}>
+      <LinearGradient
+        style={styles.item}
+        colors={
+          isFocused || isFocus
+            ? ['transparent', '#5a5a5a', 'transparent']
+            : ['transparent', 'transparent']
+        }>
+        <Icon
+          {...iconProps}
+          color={isFocused ? '#b7a742' : isFocus ? 'white' : '#3b3b3b'}
+        />
+      </LinearGradient>
+    </TouchableNativeFeedback>
+  );
+};
 
 const styles = StyleSheet.create({
   list: {
@@ -58,6 +74,9 @@ const styles = StyleSheet.create({
     maxHeight: 120,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  focus: {
+    backgroundColor: 'rgba(255, 255, 255, .1)',
   },
 });
 

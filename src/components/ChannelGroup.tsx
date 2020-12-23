@@ -30,24 +30,30 @@ const ChannelGroup: React.FC = ({
 
   return (
     <View>
-      <Subheading>
-        {item.title.replace(/[^a-zA-Z0-9]/g, '').replace('FR', '')}
-      </Subheading>
-      <Spacer height={isTablet() ? 15 : 10} />
+      <View accessible={false}>
+        <Subheading>
+          {item.title.replace(/[^a-zA-Z0-9]/g, '').replace('FR', '')}
+        </Subheading>
+      </View>
+      <Spacer height={isTablet() ? 5 : 0} />
       <FlatList
         horizontal
         data={item.items}
         renderItem={renderChannel}
         style={styles.list}
         keyExtractor={({ name }) => name}
+        contentContainerStyle={styles.contentContainer}
       />
-      <Spacer height={isTablet() ? 40 : 30} />
+      <Spacer height={isTablet() ? 20 : 10} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   list: { paddingLeft: isTablet() ? 0 : 5 },
+  contentContainer: {
+    paddingVertical: 10,
+  },
 });
 
 export default ChannelGroup;
