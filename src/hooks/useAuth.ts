@@ -32,21 +32,14 @@ const useAuth = (): UseAuthProps => {
     setLoading(true);
 
     try {
-      // TODO: maybe try to change API from POST to GET for remove headers, body and method ? Just request more simply ?
-      const request = await fetch(`${API_URL}/playlist`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          accept: 'application/json',
-        },
-        body: JSON.stringify({
-          url: serverUrl,
-        }),
-      });
-      const response = await request.json();
-      await setPlaylistId(response.playlistId);
-      await getAndReceivePlaylist(response.playlistId);
-      await setFileUrl(serverUrl);
+      const request = await fetch(`${API_URL}/login?url=${serverUrl}`);
+      const { playlistId } = await request.json();
+
+      await Promise.all([
+        setPlaylistId(playlistId),
+        getAndReceivePlaylist(playlistId),
+        setFileUrl(serverUrl),
+      ]);
 
       return navigation.navigate(Screen.Home);
     } catch (error) {
@@ -70,6 +63,7 @@ const useAuth = (): UseAuthProps => {
     }
 
     const url = generateLoginUrl(formData);
+
     return login(url);
   };
 
@@ -77,8 +71,7 @@ const useAuth = (): UseAuthProps => {
     setLoading(true);
 
     try {
-      await getAndReceivePlaylist(id);
-      await setPlaylistId(id);
+      await Promise.all([getAndReceivePlaylist(id), setPlaylistId(id)]);
 
       return navigation.navigate(Screen.Home);
     } catch (error) {
