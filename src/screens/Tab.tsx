@@ -1,4 +1,4 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import React, { memo } from 'react';
 import { FlatList } from 'react-native';
 import { Channel as ChannelType } from '../types';
@@ -11,13 +11,11 @@ import Spacer from '../components/Spacer';
 const TabScreen: React.FC = () => {
   const { params } = useRoute();
   const { addOrRemoveFromFavoris } = useFavoris();
-  const navigation = useNavigation();
 
   const renderChannel: React.FC = ({ item }: { item: ChannelType }) => (
     <ChannelGroup
       item={item}
       addOrRemoveFromFavoris={addOrRemoveFromFavoris}
-      navigation={navigation}
       categoryName={params.categoryName}
     />
   );

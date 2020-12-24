@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   Dimensions,
+  Platform,
   StatusBar,
   StyleSheet,
   TouchableNativeFeedback,
@@ -36,7 +37,7 @@ const TabBar = ({ state, navigation }) => (
 );
 
 const Item = ({ onPress, isFocused, iconProps }) => {
-  const [isFocus, setIsFocus] = useState(isFocused);
+  const [isFocus, setIsFocus] = useState(Platform.isTV ? isFocused : false);
 
   return (
     <TouchableNativeFeedback
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
+    zIndex: 2,
     width: TAB_BAR_WIDTH,
     height: Dimensions.get('window').height - StatusBar.currentHeight,
   },
