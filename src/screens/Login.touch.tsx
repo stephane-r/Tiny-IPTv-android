@@ -56,7 +56,7 @@ const LoginAndroidScreen: React.FC = () => {
         {isPlaylistIdLoginType && <PlaylistIdLogin />}
       </View>
       <View style={styles.appVersion}>
-        <AppVersion color="black" />
+        <AppVersion />
         <Spacer height={20} />
       </View>
     </>
@@ -82,7 +82,7 @@ const AcountLogin = () => {
   return (
     <>
       <Spacer height={40} />
-      <Subheading color="black">Account</Subheading>
+      <Subheading>Account</Subheading>
       <View style={styles.form}>
         <Spacer height={10} />
         <TextInput
@@ -120,7 +120,7 @@ const M3uFileLogin = () => {
   return (
     <>
       <Spacer height={40} />
-      <Subheading color="black">Account</Subheading>
+      <Subheading>Account</Subheading>
       <View style={styles.form}>
         <Spacer height={15} />
         <TextInput mode="outlined" label="url" onChangeText={setUrl} />
@@ -144,7 +144,7 @@ const PlaylistIdLogin = () => {
   return (
     <>
       <Spacer height={40} />
-      <Subheading color="black">Playlist ID</Subheading>
+      <Subheading>Playlist ID</Subheading>
       <View style={styles.form}>
         <Spacer height={15} />
         <TextInput

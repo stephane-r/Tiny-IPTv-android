@@ -1,23 +1,30 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Screen } from '../enums/Screen';
 import LoadingScreen from '../screens/Loading';
 import LoginScreen from '../screens/Login';
 import HomeScreen from '../screens/Home';
-import { Provider as PaperProvider } from 'react-native-paper';
+import {
+  DarkTheme,
+  DefaultTheme,
+  Provider as PaperProvider,
+} from 'react-native-paper';
 import Snackbar from './Snackbar';
 import useUpdateRelease from '../hooks/useUpdateRelease';
 import SettingsScreen from '../screens/Settings';
+import { Appearance } from 'react-native';
 
 const Stack = createStackNavigator();
 
 const App = () => {
   useUpdateRelease();
+  useEffect(() => {}, []);
 
   return (
-    <PaperProvider>
+    <PaperProvider
+      theme={Appearance.getColorScheme() === 'dark' ? DarkTheme : DefaultTheme}>
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{ headerShown: false }}

@@ -9,14 +9,21 @@ import {
 } from 'react-native';
 import LoginTvScreen from './Login.tv';
 import LoginAndroidScreen from './Login.touch';
+import { useTheme } from 'react-native-paper';
 
-const LoginScreen: React.FC = () => (
-  <ScrollView>
-    <View style={styles.container}>
-      {Platform.isTV ? <LoginTvScreen /> : <LoginAndroidScreen />}
-    </View>
-  </ScrollView>
-);
+const LoginScreen: React.FC = () => {
+  const { colors } = useTheme();
+
+  return (
+    <ScrollView>
+      <View style={{ backgroundColor: colors.background }}>
+        <View style={styles.container}>
+          {Platform.isTV ? <LoginTvScreen /> : <LoginAndroidScreen />}
+        </View>
+      </View>
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -44,7 +44,7 @@ const LoginTvScreen: React.FC = () => {
         </Button>
       </View>
       <View style={styles.appVersion}>
-        <AppVersion color="black" />
+        <AppVersion />
         <Spacer height={20} />
       </View>
       <InlineKeyboard
