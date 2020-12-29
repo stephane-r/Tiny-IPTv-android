@@ -79,9 +79,11 @@ const Player = () => {
         x: pan.x._value,
         y: pan.y._value,
       }),
-    onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
-      useNativeDriver: false,
-    }),
+    onPanResponderMove:
+      !fullscreen &&
+      Animated.event([null, { dx: pan.x, dy: pan.y }], {
+        useNativeDriver: false,
+      }),
     onPanResponderRelease: () => pan.flattenOffset(),
   });
 
