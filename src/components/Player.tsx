@@ -20,9 +20,7 @@ import { useDeviceOrientation } from '@react-native-community/hooks';
 
 const getWindowDimension = () => ({
   width: Dimensions.get('window').width,
-  height:
-    Dimensions.get('window').height -
-    (isTablet() ? StatusBar.currentHeight : 0),
+  height: Dimensions.get('window').height,
 });
 
 const Player = () => {
@@ -47,6 +45,8 @@ const Player = () => {
   });
 
   const togglePlayerStyles = () => {
+    StatusBar.setHidden(!fullscreen);
+
     if (!fullscreen) {
       pan.setValue({
         x: 0,
