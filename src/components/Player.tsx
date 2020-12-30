@@ -3,7 +3,6 @@ import React, { memo, useEffect, useRef, useState } from 'react';
 import { VLCPlayer } from '@imokhles/react-native-vlc';
 import {
   Animated,
-  Dimensions,
   PanResponder,
   TouchableNativeFeedback,
   StatusBar,
@@ -11,30 +10,24 @@ import {
   View,
   Platform,
   BackHandler,
-  Pressable,
-  Text,
 } from 'react-native';
 import { useAnimation } from 'react-native-animation-hooks';
-import { AppState, setSource, useApp } from '../states/app';
+import { AppState, useApp } from '../states/app';
 import { isTablet } from 'react-native-device-info';
-import { ActivityIndicator, IconButton } from 'react-native-paper';
-import { useDeviceOrientation } from '@react-native-community/hooks';
-import LinearGradient from 'react-native-linear-gradient';
+import { ActivityIndicator } from 'react-native-paper';
 import PlayerControls from './PlayerControls';
-
-const getWindowDimension = () => ({
-  width: Dimensions.get('window').width,
-  height: Dimensions.get('window').height,
-});
+import usePlayer from '../hooks/usePlayer';
 
 const Player = () => {
-  const orientation = useDeviceOrientation();
   const [isLoading, setIsLoading] = useState(true);
-  const [fullscreen, setIsFullscreen] = useState(Platform.isTV);
-  const [fullscreenDimensions, setFullscreenDimensions] = useState(
-    getWindowDimension(),
-  );
-  const [controls, showControls] = useState(false);
+  const {
+    fullscreen,
+    setIsFullscreen,
+    controls,
+    showControls,
+    playerDimensions,
+    stopPlayer,
+  } = usePlayer();
   const app: AppState = useApp();
   const opacity = useAnimation({
     toValue: app.source.visible ? 1 : 0,
@@ -44,12 +37,6 @@ const Player = () => {
   });
   const scale = useAnimation({
     toValue: app.source.visible ? 1 : 0.7,
-    type: 'spring',
-    useNativeDriver: true,
-    delay: 200,
-  });
-  const controlsOpacity = useAnimation({
-    toValue: controls ? 1 : 0,
     type: 'spring',
     useNativeDriver: true,
     delay: 200,
@@ -69,8 +56,6 @@ const Player = () => {
   };
 
   useEffect(() => {
-    setFullscreenDimensions(getWindowDimension());
-
     if (Platform.isTV) {
       BackHandler.addEventListener('hardwareBackPress', () => {
         if (fullscreen) {
@@ -80,11 +65,7 @@ const Player = () => {
         return false;
       });
     }
-
-    if (controls) {
-      setTimeout(() => showControls(false), 3000);
-    }
-  }, [orientation, fullscreen, controls]);
+  });
 
   const pan = useRef(new Animated.ValueXY()).current;
   const panResponder = PanResponder.create({
@@ -101,12 +82,6 @@ const Player = () => {
       }),
     onPanResponderRelease: () => pan.flattenOffset(),
   });
-
-  const playerDimensions = fullscreen
-    ? fullscreenDimensions
-    : isTablet()
-    ? styles.playerPipMedium
-    : styles.playerPipSmall;
 
   return (
     <Animated.View
@@ -132,12 +107,7 @@ const Player = () => {
         controlsIsShow={controls}
         showControls={showControls}
         onFullscreenPress={togglePlayerStyles}
-        onStopPress={() =>
-          setSource({
-            uri: null,
-            visible: false,
-          })
-        }
+        onStopPress={stopPlayer}
       />
       {app.source.uri ? (
         <TouchableNativeFeedback onPress={() => showControls(true)}>
@@ -172,14 +142,6 @@ const styles = StyleSheet.create({
     zIndex: 2,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  playerPipSmall: {
-    width: 300,
-    height: 170,
-  },
-  playerPipMedium: {
-    width: 480,
-    height: 270,
   },
 });
 
