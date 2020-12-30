@@ -17,6 +17,7 @@ import { isTablet } from 'react-native-device-info';
 import { ActivityIndicator } from 'react-native-paper';
 import PlayerControls from './PlayerControls';
 import usePlayer from '../hooks/usePlayer';
+import PlayerLoader from './PlayerLoader';
 
 const Player = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -97,11 +98,7 @@ const Player = () => {
         },
       ]}
       {...panResponder.panHandlers}>
-      {isLoading && (
-        <View style={styles.activityIndicator}>
-          <ActivityIndicator color="white" size="large" />
-        </View>
-      )}
+      {isLoading && <PlayerLoader />}
       <PlayerControls
         playerIsFullscreen={fullscreen}
         controlsIsShow={controls}
@@ -132,16 +129,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 2,
     backgroundColor: 'black',
-  },
-  activityIndicator: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 
