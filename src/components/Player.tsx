@@ -11,12 +11,16 @@ import {
   View,
   Platform,
   BackHandler,
+  Pressable,
+  Text,
 } from 'react-native';
 import { useAnimation } from 'react-native-animation-hooks';
-import { AppState, useApp } from '../states/app';
+import { AppState, setSource, useApp } from '../states/app';
 import { isTablet } from 'react-native-device-info';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, IconButton } from 'react-native-paper';
 import { useDeviceOrientation } from '@react-native-community/hooks';
+import LinearGradient from 'react-native-linear-gradient';
+import PlayerControls from './PlayerControls';
 
 const getWindowDimension = () => ({
   width: Dimensions.get('window').width,
@@ -30,6 +34,7 @@ const Player = () => {
   const [fullscreenDimensions, setFullscreenDimensions] = useState(
     getWindowDimension(),
   );
+  const [controls, showControls] = useState(false);
   const app: AppState = useApp();
   const opacity = useAnimation({
     toValue: app.source.visible ? 1 : 0,
@@ -39,6 +44,12 @@ const Player = () => {
   });
   const scale = useAnimation({
     toValue: app.source.visible ? 1 : 0.7,
+    type: 'spring',
+    useNativeDriver: true,
+    delay: 200,
+  });
+  const controlsOpacity = useAnimation({
+    toValue: controls ? 1 : 0,
     type: 'spring',
     useNativeDriver: true,
     delay: 200,
@@ -69,7 +80,11 @@ const Player = () => {
         return false;
       });
     }
-  }, [orientation, fullscreen]);
+
+    if (controls) {
+      setTimeout(() => showControls(false), 3000);
+    }
+  }, [orientation, fullscreen, controls]);
 
   const pan = useRef(new Animated.ValueXY()).current;
   const panResponder = PanResponder.create({
@@ -112,8 +127,20 @@ const Player = () => {
           <ActivityIndicator color="white" size="large" />
         </View>
       )}
+      <PlayerControls
+        playerIsFullscreen={fullscreen}
+        controlsIsShow={controls}
+        showControls={showControls}
+        onFullscreenPress={togglePlayerStyles}
+        onStopPress={() =>
+          setSource({
+            uri: null,
+            visible: false,
+          })
+        }
+      />
       {app.source.uri ? (
-        <TouchableNativeFeedback onPress={togglePlayerStyles}>
+        <TouchableNativeFeedback onPress={() => showControls(true)}>
           <VLCPlayer
             style={playerDimensions}
             source={{
