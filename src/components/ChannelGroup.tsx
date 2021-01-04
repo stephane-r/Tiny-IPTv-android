@@ -29,7 +29,7 @@ const ChannelGroup: React.FC = ({
   return (
     <View>
       <View accessible={false}>
-        <Subheading>
+        <Subheading color="white">
           {item.title.replace(/[^a-zA-Z0-9]/g, '').replace('FR', '')}
         </Subheading>
       </View>

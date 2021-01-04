@@ -32,8 +32,18 @@ const useAuth = (): UseAuthProps => {
     setLoading(true);
 
     try {
-      const request = await fetch(`${API_URL}/login?url=${serverUrl}`);
+      const request = await fetch(`${API_URL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          accept: 'application/json',
+        },
+        body: JSON.stringify({
+          url: serverUrl,
+        }),
+      });
       const { playlistId } = await request.json();
+      console.log(playlistId);
 
       await Promise.all([
         setPlaylistId(playlistId),

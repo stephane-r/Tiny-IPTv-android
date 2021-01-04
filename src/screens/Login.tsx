@@ -17,9 +17,7 @@ const LoginScreen: React.FC = () => {
   return (
     <ScrollView>
       <View style={{ backgroundColor: colors.background }}>
-        <View style={styles.container}>
-          {Platform.isTV ? <LoginTvScreen /> : <LoginAndroidScreen />}
-        </View>
+        {Platform.isTV ? <LoginTvScreen /> : <LoginAndroidScreen />}
       </View>
     </ScrollView>
   );

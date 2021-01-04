@@ -29,7 +29,7 @@ const LoginAndroidScreen: React.FC = () => {
     isActive ? 'contained' : 'text';
 
   return (
-    <>
+    <View style={styles.container}>
       <View style={styles.body}>
         <View style={styles.tabs}>
           <Button
@@ -59,7 +59,7 @@ const LoginAndroidScreen: React.FC = () => {
         <AppVersion />
         <Spacer height={20} />
       </View>
-    </>
+    </View>
   );
 };
 
@@ -164,7 +164,7 @@ const PlaylistIdLogin = () => {
 
 const styles = StyleSheet.create({
   container: {
-    maxWidth: 800,
+    maxWidth: 600,
     width: '100%',
     alignSelf: 'center',
     minHeight: Dimensions.get('window').height - StatusBar.currentHeight,
