@@ -7,28 +7,19 @@ import {
   TouchableNativeFeedback,
   StatusBar,
   StyleSheet,
-  View,
   Platform,
-  BackHandler,
 } from 'react-native';
 import { useAnimation } from 'react-native-animation-hooks';
-import { AppState, useApp } from '../states/app';
+import { AppState, setFullscreen, useApp } from '../states/app';
 import { isTablet } from 'react-native-device-info';
-import { ActivityIndicator } from 'react-native-paper';
 import PlayerControls from './PlayerControls';
 import usePlayer from '../hooks/usePlayer';
 import PlayerLoader from './PlayerLoader';
+import { useAndroidBackHandler } from 'react-navigation-backhandler';
 
 const Player = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const {
-    fullscreen,
-    setIsFullscreen,
-    controls,
-    showControls,
-    playerDimensions,
-    stopPlayer,
-  } = usePlayer();
+  const { controls, showControls, playerDimensions, stopPlayer } = usePlayer();
   const app: AppState = useApp();
   const opacity = useAnimation({
     toValue: app.source.visible ? 1 : 0,
@@ -43,6 +34,8 @@ const Player = () => {
     delay: 200,
   });
 
+  const { fullscreen } = app.source;
+
   const togglePlayerStyles = () => {
     StatusBar.setHidden(!fullscreen);
 
@@ -53,20 +46,8 @@ const Player = () => {
       });
     }
 
-    return setIsFullscreen(!fullscreen);
+    return setFullscreen(!fullscreen);
   };
-
-  useEffect(() => {
-    if (Platform.isTV) {
-      BackHandler.addEventListener('hardwareBackPress', () => {
-        if (fullscreen) {
-          setIsFullscreen(false);
-        }
-
-        return false;
-      });
-    }
-  });
 
   const pan = useRef(new Animated.ValueXY()).current;
   const panResponder = PanResponder.create({
@@ -84,6 +65,15 @@ const Player = () => {
     onPanResponderRelease: () => pan.flattenOffset(),
   });
 
+  useAndroidBackHandler(() => {
+    if (fullscreen) {
+      setFullscreen(false);
+      return true;
+    }
+
+    return false;
+  });
+
   return (
     <Animated.View
       style={[
@@ -99,24 +89,32 @@ const Player = () => {
       ]}
       {...panResponder.panHandlers}>
       {isLoading && <PlayerLoader />}
-      <PlayerControls
-        playerIsFullscreen={fullscreen}
-        controlsIsShow={controls}
-        showControls={showControls}
-        onFullscreenPress={togglePlayerStyles}
-        onStopPress={stopPlayer}
-      />
+      {!Platform.isTV && (
+        <PlayerControls
+          playerIsFullscreen={fullscreen}
+          controlsIsShow={controls}
+          showControls={showControls}
+          onFullscreenPress={togglePlayerStyles}
+          onStopPress={stopPlayer}
+        />
+      )}
       {app.source.uri ? (
-        <TouchableNativeFeedback onPress={() => showControls(true)}>
+        <TouchableNativeFeedback onPress={(): void => showControls(true)}>
           <VLCPlayer
             style={playerDimensions}
             source={{
               uri: app.source.uri,
             }}
-            onPlaying={() => setIsLoading(false)}
-            onStopped={() => setIsLoading(true)}
-            onBuffering={() => setIsLoading(true)}
-            onProgress={() => setIsLoading(false)}
+            onPlaying={(): void => {
+              setIsLoading(false);
+
+              if (Platform.isTV) {
+                setFullscreen(true);
+              }
+            }}
+            onStopped={(): void => setIsLoading(true)}
+            onBuffering={(): void => setIsLoading(true)}
+            onProgress={(): void => setIsLoading(false)}
           />
         </TouchableNativeFeedback>
       ) : null}

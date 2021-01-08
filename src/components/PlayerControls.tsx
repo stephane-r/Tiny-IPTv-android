@@ -47,9 +47,15 @@ const PlayerControls = ({
         <LinearGradient
           colors={['transparent', 'black']}
           style={styles.gradient}>
-          <IconButton icon="stop" onPress={onStopPress} size={ICON_SIZE} />
+          <IconButton
+            icon="stop"
+            color="white"
+            onPress={onStopPress}
+            size={ICON_SIZE}
+          />
           <IconButton
             icon={ICON_FULLSCREEN}
+            color="white"
             onPress={onFullscreenPress}
             animated
             size={ICON_SIZE}

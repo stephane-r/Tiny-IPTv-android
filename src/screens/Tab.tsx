@@ -7,6 +7,7 @@ import Layout from '../components/Layout';
 import { isTablet } from 'react-native-device-info';
 import { useFavoris } from '../hooks/useFavoris';
 import Spacer from '../components/Spacer';
+import { useAndroidBackHandler } from 'react-navigation-backhandler';
 
 const TabScreen: React.FC = () => {
   const { params } = useRoute();

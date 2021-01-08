@@ -8,12 +8,13 @@ import Spacer from '../components/Spacer';
 import { Button, useTheme } from 'react-native-paper';
 import { inlineKeyboardLanguage } from '../constants';
 import TextInputTv from '../components/TextInput.tv';
+import { DEV_USERNAME, DEV_PASSWORD, DEV_SERVER } from '@env';
 
 const LoginTvScreen: React.FC = () => {
   const [formData, setFormData] = useState<LoginFormData>({
-    username: '',
-    password: '',
-    server: '',
+    username: __DEV__ ? DEV_USERNAME : '',
+    password: __DEV__ ? DEV_PASSWORD : '',
+    server: __DEV__ ? DEV_SERVER : '',
   });
   const { submitFormData, loading } = useAuth();
   const [activeFieldName, setActiveFieldName] = useState<null | string>(null);

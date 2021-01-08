@@ -1,4 +1,5 @@
 import { createState, createHook } from '@zoontek/react-global-state';
+import { Platform } from 'react-native';
 import { FavorisState, Playlist, Snackbar } from '../types';
 
 export interface AppState extends Playlist {
@@ -7,6 +8,7 @@ export interface AppState extends Playlist {
   source: {
     uri: null | string;
     visible: boolean;
+    fullscreen: boolean;
   };
 }
 
@@ -38,6 +40,7 @@ const initialAppState: AppState = {
   source: {
     uri: null,
     visible: false,
+    fullscreen: Platform.isTV,
   },
 };
 
@@ -78,9 +81,19 @@ export const showSnakbar = ({
       action,
     },
   }));
-
 export const setSource = (source: { uri: null | string; visible: boolean }) =>
   setState((state: AppState) => ({
     ...state,
-    source,
+    source: {
+      ...state.source,
+      ...source,
+    },
+  }));
+export const setFullscreen = (fullscreen: boolean) =>
+  setState((state: AppState) => ({
+    ...state,
+    source: {
+      ...state.source,
+      fullscreen,
+    },
   }));

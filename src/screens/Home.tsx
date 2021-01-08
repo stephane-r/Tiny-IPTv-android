@@ -52,7 +52,7 @@ const TAB_NAVIGATOR_PROPS = () => {
 
 const GRADIENT_COLORS = ['#1d1d1d', '#5a5a5a'];
 
-const HomeScreen: React.FC = () => {
+const HomeScreen: React.FC = ({ navigation }) => {
   const app: AppState = useApp();
 
   useEffect(() => {
@@ -101,7 +101,7 @@ const HomeScreen: React.FC = () => {
       ) : (
         <Text>Loading data...</Text>
       )}
-      <Player />
+      <Player navigation={navigation} />
     </LinearGradient>
   );
 };

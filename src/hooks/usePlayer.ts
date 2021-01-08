@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { isTablet } from 'react-native-device-info';
 import { useDeviceOrientation } from '@react-native-community/hooks';
-import { Dimensions, Platform, StyleSheet } from 'react-native';
-import { setSource } from '../states/app';
+import { Dimensions, StyleSheet } from 'react-native';
+import { AppState, setSource, useApp } from '../states/app';
 
 interface UsePlayerHook {
   fullscreen: boolean;
@@ -23,7 +23,7 @@ const getWindowDimension = (): UsePlayerHook => ({
 
 const usePlayer = () => {
   const orientation = useDeviceOrientation();
-  const [fullscreen, setIsFullscreen] = useState(Platform.isTV);
+  const app: AppState = useApp();
   const [fullscreenDimensions, setFullscreenDimensions] = useState(
     getWindowDimension(),
   );
@@ -32,22 +32,12 @@ const usePlayer = () => {
   useEffect(() => {
     setFullscreenDimensions(getWindowDimension());
 
-    //     if (Platform.isTV) {
-    //       BackHandler.addEventListener('hardwareBackPress', () => {
-    //         if (fullscreen) {
-    //           setIsFullscreen(false);
-    //         }
-
-    //         return false;
-    //       });
-    //     }
-
     if (controls) {
       setTimeout(() => showControls(false), 3000);
     }
-  }, [orientation, fullscreen, controls]);
+  }, [orientation, controls]);
 
-  const playerDimensions = fullscreen
+  const playerDimensions = app.source.fullscreen
     ? fullscreenDimensions
     : isTablet()
     ? styles.playerPipMedium
@@ -60,8 +50,6 @@ const usePlayer = () => {
     });
 
   return {
-    fullscreen,
-    setIsFullscreen,
     playerDimensions,
     controls,
     showControls,
