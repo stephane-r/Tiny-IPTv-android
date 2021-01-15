@@ -14,7 +14,7 @@ const LoginTvScreen: React.FC = () => {
   const [formData, setFormData] = useState<LoginFormData>({
     username: __DEV__ ? DEV_USERNAME : '',
     password: __DEV__ ? DEV_PASSWORD : '',
-    server: __DEV__ ? DEV_SERVER : '',
+    server: __DEV__ ? DEV_SERVER : 'http://',
   });
   const { submitFormData, loading } = useAuth();
   const [activeFieldName, setActiveFieldName] = useState<null | string>(null);

@@ -67,7 +67,7 @@ const AcountLogin = () => {
   const [formData, setFormData] = useState<LoginFormData>({
     username: '',
     password: '',
-    server: '',
+    server: 'http://',
   });
   const { submitFormData, loading } = useAuth();
 
@@ -88,18 +88,21 @@ const AcountLogin = () => {
         <TextInput
           mode="outlined"
           label="Username"
+          value={formData.username}
           onChangeText={(username) => onChangeText('username', username)}
         />
         <Spacer height={15} />
         <TextInput
           mode="outlined"
           label="Password"
+          value={formData.password}
           onChangeText={(password) => onChangeText('password', password)}
         />
         <Spacer height={15} />
         <TextInput
           mode="outlined"
           label="Server"
+          value={formData.server}
           onChangeText={(server) => onChangeText('server', server)}
         />
         <Spacer height={15} />
