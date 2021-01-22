@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import {
   Platform,
   StyleSheet,
@@ -8,24 +8,21 @@ import {
   Animated,
 } from 'react-native';
 import { isTablet } from 'react-native-device-info';
-import { setSource } from '../states/app';
 import { Channel as ChannelType } from '../types';
 import { IconFavoris, IconFavorisButton } from './IconFavoris';
 import FastImage from 'react-native-fast-image';
 import { useAnimation } from 'react-native-animation-hooks';
+import { useFavoris } from '../hooks/useFavoris';
+import { setSource } from '../states/player';
 
 const IMAGE_PLACEHOLDER =
   'https://www.semencesdefrance.com/wp-content/uploads/2020/01/placeholder.png';
 
 const Channel: React.FC = ({
   item,
-  isFavoris,
-  addOrRemoveFromFavoris,
   categoryName,
 }: {
   item: ChannelType;
-  favoris: string[];
-  addOrRemoveFromFavoris: (channel: ChannelType) => void;
   categoryName: string;
 }) => {
   const [isFocus, setIsFocus] = useState(false);
@@ -35,9 +32,14 @@ const Channel: React.FC = ({
     useNativeDriver: true,
     delay: 100,
   });
+  const { addOrRemoveFromFavoris, favorisIds } = useFavoris();
 
   const onFocus = () => setIsFocus(true);
   const onBlur = () => setIsFocus(false);
+
+  const isFavoris = favorisIds.includes(item.name);
+
+  useEffect(() => {}, [favorisIds]);
 
   return (
     <Animated.View style={{ transform: [{ scale }] }}>

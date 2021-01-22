@@ -4,10 +4,11 @@ import { API_URL } from '@env';
 import { getAndReceivePlaylist } from '../api';
 import { Playlist } from '../enums/Playlist';
 import { Screen } from '../enums/Screen';
-import { resetState, showSnakbar } from '../states/app';
+import { resetState } from '../states/app';
 import { LoginFormData } from '../types';
 import generateLoginUrl from '../utils/generateLoginUrl';
 import { useState } from 'react';
+import { showSnakbar } from '../states/snackbar';
 
 interface UseAuthProps {
   login: (url: string) => Promise<void>;
@@ -94,7 +95,7 @@ const useAuth = (): UseAuthProps => {
   };
 
   const logout = async (): Promise<void> => {
-    navigation.navigate(Screen.Login);
+    await navigation.navigate(Screen.Login);
 
     setTimeout(() => {
       resetState();

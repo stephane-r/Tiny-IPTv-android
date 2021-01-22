@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Linking } from 'react-native';
 import semverCompare from 'semver-compare';
 import { version } from '../../package';
-import { showSnakbar } from '../states/app';
+import { showSnakbar } from '../states/snackbar';
 import fetchAppRelease from '../utils/fetchGithubAppVersion';
 
 interface UseUpdateReleaseHook {

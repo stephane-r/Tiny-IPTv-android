@@ -4,7 +4,7 @@ export interface LoginFormData {
   server: string;
 }
 
-export interface Playlist {
+export interface AppState {
   categories: string[];
   data: {
     [key: string]: ChannelGroup[];

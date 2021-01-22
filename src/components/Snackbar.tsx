@@ -1,18 +1,17 @@
 import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { Snackbar as SnackbarApp } from 'react-native-paper';
-import { AppState, closeSnackbar, useApp } from '../states/app';
+import { closeSnackbar, useSnackbarState } from '../states/snackbar';
 import { Snackbar as SnackbarType } from '../types';
 
 const Snackbar = () => {
-  const app: AppState = useApp();
-  const snackbar: SnackbarType = app.snackbar;
+  const snackbar: SnackbarType = useSnackbarState();
 
   useEffect(() => {
-    if (app.snackbar.visible) {
+    if (snackbar.visible) {
       setTimeout(() => closeSnackbar(), 5000);
     }
-  }, [app]);
+  }, [snackbar]);
 
   return (
     <SnackbarApp

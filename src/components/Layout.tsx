@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { isMobile } from '../constants';
 import Spacer from './Spacer';
 import { TAB_BAR_WIDTH } from './TabBar';
@@ -12,7 +13,7 @@ const Layout: React.FC = ({ title, rightRender, children }) => (
       <Title>{title}</Title>
       {rightRender && rightRender}
     </View>
-    {children}
+    <ScrollView>{children}</ScrollView>
   </View>
 );
 

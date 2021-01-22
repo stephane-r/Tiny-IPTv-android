@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { isTablet } from 'react-native-device-info';
 import { FlatList } from 'react-native-gesture-handler';
-import { useApp } from '../states/app';
 import { Channel as ChannelType } from '../types';
 import Channel from './Channel';
 import Spacer from './Spacer';
@@ -13,17 +12,10 @@ const ChannelGroup: React.FC = ({
   ...props
 }: {
   item: ChannelType;
-  addOrRemoveFromFavoris: (channel: ChannelType) => void;
   categoryName: string;
 }) => {
-  const app = useApp();
-
   const renderChannel = (itemProps) => (
-    <Channel
-      item={itemProps.item}
-      isFavoris={app.favoris.ids.includes(itemProps.item.name)}
-      {...props}
-    />
+    <Channel item={itemProps.item} {...props} />
   );
 
   return (

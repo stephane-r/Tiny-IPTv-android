@@ -17,8 +17,9 @@ import { useAsyncStorage } from 'use-async-storage';
 import RNRestart from 'react-native-restart';
 import Spacer from '../components/Spacer';
 import { Playlist } from '../enums/Playlist';
-import { AppState, showSnakbar, useApp } from '../states/app';
+import { AppState, useApp } from '../states/app';
 import { isTablet } from 'react-native-device-info';
+import { showSnakbar } from '../states/snackbar';
 
 const SettingsScreen = ({ navigation }) => {
   const [needToReload, setNeedToReload] = useState(false);

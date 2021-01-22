@@ -10,7 +10,6 @@ import {
   Platform,
 } from 'react-native';
 import { useAnimation } from 'react-native-animation-hooks';
-import { AppState, setFullscreen, useApp } from '../states/app';
 import { isTablet } from 'react-native-device-info';
 import PlayerControls from './PlayerControls';
 import usePlayer from '../hooks/usePlayer';
@@ -19,22 +18,28 @@ import { useAndroidBackHandler } from 'react-navigation-backhandler';
 
 const Player = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const { controls, showControls, playerDimensions, stopPlayer } = usePlayer();
-  const app: AppState = useApp();
+  const {
+    controls,
+    showControls,
+    playerDimensions,
+    stopPlayer,
+    setFullscreen,
+    player,
+  } = usePlayer();
   const opacity = useAnimation({
-    toValue: app.source.visible ? 1 : 0,
+    toValue: player.visible ? 1 : 0,
     type: 'spring',
     useNativeDriver: true,
     delay: 200,
   });
   const scale = useAnimation({
-    toValue: app.source.visible ? 1 : 0.7,
+    toValue: player.visible ? 1 : 0.7,
     type: 'spring',
     useNativeDriver: true,
     delay: 200,
   });
 
-  const { fullscreen } = app.source;
+  const { fullscreen } = player;
 
   const togglePlayerStyles = () => {
     StatusBar.setHidden(!fullscreen);
@@ -100,12 +105,12 @@ const Player = () => {
           onStopPress={stopPlayer}
         />
       )}
-      {app.source.uri ? (
+      {player.uri ? (
         <TouchableNativeFeedback onPress={(): void => showControls(true)}>
           <VLCPlayer
             style={playerDimensions}
             source={{
-              uri: app.source.uri,
+              uri: player.uri,
             }}
             onPlaying={(): void => {
               setIsLoading(false);

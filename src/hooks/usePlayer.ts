@@ -2,7 +2,12 @@ import { useEffect, useState } from 'react';
 import { isTablet } from 'react-native-device-info';
 import { useDeviceOrientation } from '@react-native-community/hooks';
 import { Dimensions, StyleSheet } from 'react-native';
-import { AppState, setFullscreen, setSource, useApp } from '../states/app';
+import {
+  PlayerState,
+  usePlayerState,
+  setSource,
+  setFullscreen,
+} from '../states/player';
 
 interface UsePlayerHook {
   fullscreen: boolean;
@@ -23,7 +28,7 @@ const getWindowDimension = (): { width: number; height: number } => ({
 
 const usePlayer = (): UsePlayerHook => {
   const orientation = useDeviceOrientation();
-  const app: AppState = useApp();
+  const { player }: PlayerState = usePlayerState();
   const [fullscreenDimensions, setFullscreenDimensions] = useState(
     getWindowDimension(),
   );
@@ -37,7 +42,7 @@ const usePlayer = (): UsePlayerHook => {
     }
   }, [orientation, controls]);
 
-  const playerDimensions = app.source.fullscreen
+  const playerDimensions = player.fullscreen
     ? fullscreenDimensions
     : isTablet()
     ? styles.playerPipMedium
@@ -54,6 +59,8 @@ const usePlayer = (): UsePlayerHook => {
     controls,
     showControls,
     stopPlayer,
+    player,
+    setFullscreen,
   };
 };
 

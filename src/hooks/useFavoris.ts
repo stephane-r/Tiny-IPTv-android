@@ -1,13 +1,8 @@
 import { useAsyncStorage } from 'use-async-storage';
 import { Playlist } from '../enums/Playlist';
 import { Channel } from '../types';
-import {
-  AppState,
-  setFavoris as setFavorisState,
-  showSnakbar,
-  useApp,
-} from '../states/app';
-import { useEffect } from 'react';
+import { setFavoris as setFavorisState } from '../states/favoris';
+import { showSnakbar } from '../states/snackbar';
 
 interface UseFavorisHook {
   addOrRemoveFromFavoris: (channel: Channel) => void;
@@ -15,13 +10,11 @@ interface UseFavorisHook {
 }
 
 const useFavoris = (): UseFavorisHook => {
-  const app: AppState = useApp();
-  const favoris = app.favoris.data;
-  const favorisIds = app.favoris.ids;
-  const [, setFavoris] = useAsyncStorage<string[]>(Playlist.Favoris, []);
-  const [, setFavorisIds] = useAsyncStorage<Channel[]>(Playlist.FavorisIds, []);
-
-  useEffect(() => {}, []);
+  const [favoris, setFavoris] = useAsyncStorage<string[]>(Playlist.Favoris, []);
+  const [favorisIds, setFavorisIds] = useAsyncStorage<Channel[]>(
+    Playlist.FavorisIds,
+    [],
+  );
 
   const addOrRemoveFromFavoris = async (channel: Channel): void => {
     let favorisUpdated = [];
@@ -35,18 +28,18 @@ const useFavoris = (): UseFavorisHook => {
     } else {
       favorisUpdated = [...favoris, channel];
       favorisIdsUpdated = [...favorisIds, channel.name];
-      snackbarMessage = `${channel.name} has been added to your favoris`;
+      snackbarMessage = `${channel.name} has been added on your favoris`;
     }
 
     setFavoris(favorisUpdated);
     setFavorisIds(favorisIdsUpdated);
 
-    setFavorisState({
+    await setFavorisState({
       data: favorisUpdated,
       ids: favorisIdsUpdated,
     });
 
-    return showSnakbar({
+    showSnakbar({
       message: snackbarMessage,
     });
   };
@@ -62,6 +55,8 @@ const useFavoris = (): UseFavorisHook => {
   };
 
   return {
+    favoris,
+    favorisIds,
     addOrRemoveFromFavoris,
     clearFavoris,
   };

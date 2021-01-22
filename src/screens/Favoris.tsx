@@ -6,29 +6,28 @@ import Channel from '../components/Channel';
 import Layout from '../components/Layout';
 import Spacer from '../components/Spacer';
 import { useFavoris } from '../hooks/useFavoris';
-import { useApp } from '../states/app';
 import { useNavigation } from '@react-navigation/native';
 import { isTablet } from 'react-native-device-info';
 import { isMobile } from '../constants';
 import Subheading from '../components/Subheading';
+import { useFavorisState } from '../states/favoris';
 
 const FavorisScreen = () => {
   const { addOrRemoveFromFavoris, clearFavoris } = useFavoris();
-  const app = useApp();
   const navigation = useNavigation();
-  const favoris = app.favoris.data;
+  const { favoris } = useFavorisState();
 
   return (
     <Layout title="Favoris">
       <Spacer height={isTablet() ? 30 : 10} />
-      {favoris.length === 0 ? (
+      {favoris.data.length === 0 ? (
         <FavorisEmpty title="Favoris is empty" />
       ) : (
         <ScrollView>
           <View style={styles.content}>
             <Subheading>All</Subheading>
             <View style={styles.list}>
-              {favoris.map((f) => (
+              {favoris.data.map((f) => (
                 <View key={f.name}>
                   <Channel
                     item={f}
