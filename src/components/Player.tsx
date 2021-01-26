@@ -56,9 +56,13 @@ const Player = () => {
 
   const pan = useRef(new Animated.ValueXY()).current;
   const panResponder = PanResponder.create({
-    onMoveShouldSetPanResponder: () => true,
+    // onStartShouldSetPanResponder: () => true,
+    onStartShouldSetPanResponderCapture: () => false,
+    // onMoveShouldSetResponderCapture: () => true,
+    // onMoveShouldSetPanResponder: (event, gestureState) =>
+    //   !(gestureState.dx === 0 && gestureState.dy === 0),
     onMoveShouldSetPanResponderCapture: (evt, gestureState) =>
-      Math.abs(gestureState.dx) > 5 && Math.abs(gestureState.dy) > 5,
+      Math.abs(gestureState.dx) > 2 && Math.abs(gestureState.dy) > 2,
     onPanResponderGrant: () =>
       pan.setOffset({
         x: pan.x._value,
