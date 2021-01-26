@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Platform, StyleSheet, Text, View } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { isTablet } from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -10,7 +10,6 @@ import { useApp, AppState } from '../states/app';
 import { setFavoris } from '../states/favoris';
 import FavorisScreen from './Favoris';
 import { Screen } from '../enums/Screen';
-import TabBar from '../components/TabBar';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Playlist } from '../enums/Playlist';
 import Player from '../components/Player';
@@ -22,6 +21,11 @@ const Tab = createMaterialTopTabNavigator();
 const TAB_NAVIGATOR_PROPS = () => {
   const props = {
     lazy: true,
+    tabBarOptions: {
+      scrollEnabled: true,
+      showIcon: true,
+      showLabel: false,
+    },
     sceneContainerStyle: {
       backgroundColor: 'transparent',
     },
@@ -31,20 +35,36 @@ const TAB_NAVIGATOR_PROPS = () => {
       </View>
     ),
     removeClippedSubviews: true,
+    tabBarPosition: 'bottom',
   };
 
-  if (isTablet() || Platform.isTV) {
-    props.tabBar = (tabBarProps) => <TabBar {...tabBarProps} />;
+  if (Platform.isTV) {
+    props.tabBarOptions = {
+      ...props.tabBarOptions,
+      tabStyle: {
+        width: 60,
+      },
+      activeTintColor: 'rgba(255, 255, 255, 1)',
+      inactiveTintColor: 'rgba(255, 255, 255, .2)',
+      indicatorStyle: {
+        backgroundColor: 'white',
+      },
+      style: {
+        backgroundColor: '#b7a742',
+      },
+    };
     props.tabBarPosition = 'top';
   } else {
-    props.tabBarPosition = 'bottom';
     props.tabBarOptions = {
-      scrollEnabled: true,
+      ...props.tabBarOptions,
       tabStyle: {
         width: 80,
       },
-      showIcon: true,
-      showLabel: false,
+      indicatorStyle: {
+        backgroundColor: 'black',
+      },
+      activeTintColor: 'rgba(0, 0, 0, 1)',
+      inactiveTintColor: 'rgba(0, 0, 0, .1)',
     };
   }
 
@@ -80,7 +100,9 @@ const HomeScreen: React.FC = ({ navigation }) => {
           <Tab.Screen
             name={Screen.Favoris}
             options={{
-              tabBarIcon: () => <Icon name="favorite" size={25} color="#000" />,
+              tabBarIcon: ({ color }) => (
+                <Icon name="favorite" size={26} color={color} />
+              ),
             }}
             component={FavorisScreen}
           />
@@ -90,7 +112,9 @@ const HomeScreen: React.FC = ({ navigation }) => {
               name={c}
               component={TabScreen}
               options={{
-                tabBarIcon: () => <Icon {...getQualityIcon(c)} color="#000" />,
+                tabBarIcon: ({ color }) => (
+                  <Icon {...getQualityIcon(c)} color={color} />
+                ),
               }}
               initialParams={{
                 categoryName: c,

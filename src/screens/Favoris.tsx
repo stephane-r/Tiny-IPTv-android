@@ -19,13 +19,12 @@ const FavorisScreen = () => {
 
   return (
     <Layout title="Favoris">
-      <Spacer height={isTablet() ? 30 : 10} />
       {favoris.data.length === 0 ? (
         <FavorisEmpty title="Favoris is empty" />
       ) : (
         <ScrollView>
           <View style={styles.content}>
-            <Subheading>All</Subheading>
+            <Subheading color="white">All</Subheading>
             <View style={styles.list}>
               {favoris.data.map((f) => (
                 <View key={f.name}>

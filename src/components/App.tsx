@@ -16,6 +16,7 @@ import Snackbar from './Snackbar';
 import useUpdateRelease from '../hooks/useUpdateRelease';
 import SettingsScreen from '../screens/Settings';
 import { Appearance } from 'react-native';
+import { Color } from '../enums/Color';
 
 KeepAwake.activate();
 
@@ -25,9 +26,21 @@ const App = () => {
   useUpdateRelease();
   useEffect(() => {}, []);
 
+  const appTheme =
+    Appearance.getColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+
+  const theme = {
+    ...appTheme,
+    roundness: 2,
+    colors: {
+      ...appTheme.colors,
+      primary: Color.primary,
+      accent: Color.primary,
+    },
+  };
+
   return (
-    <PaperProvider
-      theme={Appearance.getColorScheme() === 'dark' ? DarkTheme : DefaultTheme}>
+    <PaperProvider theme={theme}>
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{ headerShown: false }}

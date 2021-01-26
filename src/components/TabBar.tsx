@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import {
   Dimensions,
   Platform,
@@ -11,33 +11,34 @@ import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import getQualityIcon from '../utils/getQualityIcon';
 
-const TAB_BAR_WIDTH: number = 60;
+const TAB_BAR_WIDTH: number = 30;
 
 const TabBar = ({ state, navigation }) => (
   <View style={styles.list}>
-    {state.routes.map((route, index) => {
-      const isFocused = state.index === index;
-
-      const onPress = (): void => {
-        if (!isFocused) {
-          navigation.navigate(route.name);
-        }
-      };
-
-      return (
-        <Item
-          key={route.key}
-          isFocused={isFocused}
-          onPress={onPress}
-          iconProps={getQualityIcon(route.name)}
-        />
-      );
-    })}
+    {state.routes.map((route, index) => (
+      <Item
+        key={route.key}
+        navigation={navigation}
+        routeName={route.name}
+        routeIndex={index}
+        stateIndex={state.index}
+        iconProps={getQualityIcon(route.name)}
+      />
+    ))}
   </View>
 );
 
-const Item = ({ onPress, isFocused, iconProps }) => {
+const Item = ({ navigation, routeName, stateIndex, routeIndex, iconProps }) => {
+  const isFocused = stateIndex === routeIndex;
   const [isFocus, setIsFocus] = useState(Platform.isTV ? isFocused : false);
+
+  const onPress = (): void => {
+    if (!isFocused) {
+      navigation.navigate(routeName);
+    }
+  };
+
+  useEffect(() => {}, [isFocused]);
 
   return (
     <TouchableNativeFeedback
@@ -82,5 +83,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TabBar;
+export default memo(TabBar);
 export { TAB_BAR_WIDTH };
