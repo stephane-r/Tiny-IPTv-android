@@ -1,4 +1,5 @@
 import { createState, createHook } from '@zoontek/react-global-state';
+import { AppState } from '../types';
 
 const initialAppState: AppState = {
   categories: null,

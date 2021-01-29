@@ -6,6 +6,7 @@ export interface LoginFormData {
 
 export interface AppState {
   categories: string[];
+  categoriesFiltered: string[];
   data: {
     [key: string]: ChannelGroup[];
   };

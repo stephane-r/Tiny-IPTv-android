@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { isTablet } from 'react-native-device-info';
 import { IconButton, Menu as AppMenu } from 'react-native-paper';
 import { Screen } from '../enums/Screen';
@@ -47,7 +47,7 @@ const Menu = () => {
 const styles = StyleSheet.create({
   containerSmall: {
     position: 'absolute',
-    top: 15,
+    top: Platform.isTV ? -4 : 15,
     right: 0,
     zIndex: 2,
   },
